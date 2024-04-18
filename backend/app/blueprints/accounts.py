@@ -9,7 +9,7 @@ from flask_jwt_extended import (
     unset_jwt_cookies
 )
 
-from ..database import User, db
+from ..models import User, db
 
 bp = Blueprint('accounts', __name__, url_prefix='/accounts')
 

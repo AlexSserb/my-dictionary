@@ -6,7 +6,7 @@ from flask_jwt_extended import JWTManager
 
 from datetime import datetime
 
-from .database import db, User
+from .models import db, User
 
 
 def create_app(config_name='app.config.Config'):
