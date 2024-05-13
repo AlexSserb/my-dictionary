@@ -8,8 +8,10 @@ from flask_jwt_extended import (
     set_access_cookies,
     unset_jwt_cookies
 )
+from flask_pydantic import validate
 
-from ..models import User, db
+from ..database import User, db
+from ..schemes import LoginSchema, RegisterSchema, ChangePasswordSchema, TokenPairSchema
 
 bp = Blueprint('accounts', __name__, url_prefix='/accounts')
 
@@ -17,53 +19,52 @@ bp = Blueprint('accounts', __name__, url_prefix='/accounts')
 def create_tokens(identity: str):
     access_token = create_access_token(identity=identity)
     refresh_token = create_refresh_token(identity=identity)
-    return { 'access_token': access_token, 'refresh_token': refresh_token }
+    return TokenPairSchema(access_token=access_token, refresh_token=refresh_token)
 
 
 @bp.route('/login', methods=['POST'])
-def login():
-    data = request.get_json()
-    
-    user = User.get_by_identity(data['email'])
+@validate()
+def login(body: LoginSchema):
+    user = User.get_by_identity(body.username)
 
-    if user is None or not user.check_password(data['password']):
-        return jsonify({'message': 'Incorrect email or password'}), 400
+    if user is None or not user.check_password(body.password):
+        return jsonify({'message': 'Incorrect username or password'}), 400
     
-    return jsonify(create_tokens(user.email))
+    return jsonify(create_tokens(user.username).model_dump(by_alias=True))
 
 
 @bp.route('/register', methods=['POST'])
-def register():
-    data = request.get_json()
+@validate()
+def register(body: RegisterSchema):
+    if User.get_by_identity(body.username):
+        return jsonify({'message': 'Username already registered'}), 409
 
-    if User.get_by_identity(data['email']):
-        return jsonify({'message': 'Email already registered'}), 409
-
-    user = User(email=data['email'])
-    user.set_password(data['password'])
+    user = User(username=body.username)
+    user.set_password(body.password)
     db.session.add(user)
     db.session.commit()
 
-    return jsonify(create_tokens(user.email))
+    return jsonify(create_tokens(user.username).model_dump(by_alias=True))
 
 
 @bp.route('/refresh', methods=['POST'])
 @jwt_required(refresh=True)
+@validate()
 def refresh():
     identity = get_jwt_identity()
-    return jsonify(create_tokens(identity))
+    return jsonify(create_tokens(identity).model_dump(by_alias=True))
     
 
 @bp.route('/password-change', methods=['POST'])
 @jwt_required()
-def changePassword():
-    data = request.get_json()
+@validate()
+def change_password(body: ChangePasswordSchema):
     user = User.get_by_identity(get_jwt_identity())
 
-    if not user.check_password(data['oldPassword']):
+    if not user or not user.check_password(body.old_password):
         return jsonify({'message': 'Incorrect old password.'}), 400
 
-    user.set_password(data['newPassword'])
+    user.set_password(body.new_password)
     db.session.add(user)
     db.session.commit()
 

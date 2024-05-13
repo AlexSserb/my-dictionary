@@ -28,17 +28,18 @@ const LoginPage = () => {
         minWidth: '500px',
         spacing: 3
       }}>
-        <Paper elevation={5} sx={{ padding: 3, marginTop: 3, justifyContent: 'left' }}>
+        <Paper elevation={5} sx={{ padding: 3, marginTop: 3, justifyContent: 'left', backgroundColor: 'secondary.main' }}>
           <Typography textAlign={'center'} variant='h5' component='h5' sx={{ paddingBlockEnd: 3 }}>
             Log In
           </Typography>
           <form onSubmit={loginUser}>
             <FormControl sx={{ paddingBlockEnd: 3 }}>
               <TextField
-                label='Email'
-                type='email'
-                name='email'
+                label='Username'
+                type='text'
+                name='username'
                 required
+                color='info'
               />
             </FormControl><br />
             <FormControl sx={{ paddingBlockEnd: 3 }}>
@@ -47,6 +48,7 @@ const LoginPage = () => {
                 type='password'
                 name='password'
                 required
+                color='info'
               />
             </FormControl><br />
             {message && (

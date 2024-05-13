@@ -1,7 +1,7 @@
 from datetime import datetime, timezone, timedelta
 import unittest
 from app import create_app, db
-from app.models import User, Word, Language, WordTranslation, Dictionary
+from app.database import User, Word, Language, WordTranslation, Dictionary
 from app.config import Config
 
 
@@ -17,7 +17,7 @@ class WordsTestCase(unittest.TestCase):
         self.app_context.push()
         db.create_all()
 
-        self.user = User(email='ex@example.com')
+        self.user = User(username='Alex')
         self.user.set_password('password')
         db.session.add(self.user)
 

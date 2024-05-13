@@ -3,6 +3,7 @@ import {
 	Button, Typography, Modal,
 	Stack, Box, TextField, Alert
 } from '@mui/material';
+import { FormattedMessage } from 'react-intl';
 
 import authService from '../services/AuthService';
 
@@ -12,7 +13,7 @@ const style = {
 	left: '50%',
 	transform: 'translate(-50%, -50%)',
 	width: 550,
-	bgcolor: 'background.paper',
+	bgcolor: 'secondary.main',
 	borderRadius: '8px',
 	boxShadow: 24,
 	p: 4,
@@ -62,7 +63,7 @@ const ModalChangePassword = ({ setSettingsSuccessMessage }: ModalChangePasswordP
 	return (
 		<div>
 			<Button variant='contained' sx={{ marginBottom: 1 }} onClick={handleOpen}>
-				Change password
+				<FormattedMessage id='change_password_btn' />
 			</Button>
 			<Modal
 				open={open}
@@ -73,7 +74,7 @@ const ModalChangePassword = ({ setSettingsSuccessMessage }: ModalChangePasswordP
 						textAlign: 'center',
 						marginBottom: 3
 					}}>
-						Password change
+						<FormattedMessage id='password_change_header' />
 					</Typography>
 
 					<Stack spacing={1}>
@@ -82,6 +83,7 @@ const ModalChangePassword = ({ setSettingsSuccessMessage }: ModalChangePasswordP
 							label='Old password'
 							value={oldPassword}
 							onChange={event => setOldPassword(event.target.value)}
+							color='info'
 						/>
 						<TextField
 							type='password'
@@ -89,6 +91,7 @@ const ModalChangePassword = ({ setSettingsSuccessMessage }: ModalChangePasswordP
 							value={newPassword}
 							onChange={event => setNewPassword(event.target.value)}
 							inputProps={{ maxLength: 20 }}
+							color='info'
 						/>
 						<TextField
 							type='password'
@@ -96,10 +99,11 @@ const ModalChangePassword = ({ setSettingsSuccessMessage }: ModalChangePasswordP
 							value={repeatNewPassword}
 							onChange={event => setRepeatNewPassword(event.target.value)}
 							inputProps={{ maxLength: 20 }}
+							color='info'
 						/>
 						{message && <Alert sx={{ marginBottom: 2 }} severity='error'>{message}</Alert>}
 						<Button variant='contained' onClick={handleSubmit}>
-							Изменить
+							<FormattedMessage id='submit_change_password_btn' />
 						</Button>
 					</Stack>
 				</Box>

@@ -1,5 +1,5 @@
 interface LoginFormElements extends HTMLFormControlsCollection {
-    email: HTMLInputElement;
+    username: HTMLInputElement;
     password: HTMLInputElement;
     confirmPassword: HTMLInputElement;
     conditionsAccepted: HTMLInputElement;

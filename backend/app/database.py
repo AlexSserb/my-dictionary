@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import (
     String, DateTime, select, ForeignKey
 )
+from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.sql import func
 from sqlalchemy.orm import (
     Mapped, mapped_column, relationship
@@ -21,14 +22,14 @@ class User(db.Model):
     __tablename__ = 'users'
 
     id: Mapped[uuid.UUID] = mapped_column(default=uuid.uuid4, primary_key=True)
-    email: Mapped[str] = mapped_column(String(128), index=True, unique=True)
+    username: Mapped[str] = mapped_column(String(128), index=True, unique=True)
     password_hash: Mapped[str] = mapped_column(String(256))
     created_on: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     dictionaries: Mapped['Dictionary'] = relationship(back_populates='user')
 
     def __repr__(self):
-        return f'User(email={self.email})'
+        return f'User(username={self.username})'
 
     def set_password(self, password: str):
         self.password_hash = generate_password_hash(password)
@@ -37,8 +38,8 @@ class User(db.Model):
         return check_password_hash(self.password_hash, password)
 
     @classmethod
-    def get_by_identity(cls, email: str):
-        query = select(cls).where(cls.email == email)
+    def get_by_identity(cls, username: str):
+        query = select(cls).where(cls.username == username)
         user = db.session.execute(query).one_or_none()
         if user:
             return user[0]
@@ -55,6 +56,20 @@ class Language(db.Model):
     dictionaries_where_lang_target: Mapped['Dictionary'] = relationship(foreign_keys='Dictionary.target_language_id',
         back_populates='target_language')
 
+    def to_json(self) -> dict:
+        return {
+            'id': self.id,
+            'name': self.name
+        }
+
+    @classmethod
+    def get_all(cls) -> list:
+        """
+        returns all languages
+        """
+        query = select(Language)
+        return db.session.execute(query).scalars().all()
+
 
 class Dictionary(db.Model):
     __tablename__ = 'dictionaries'
@@ -63,6 +78,8 @@ class Dictionary(db.Model):
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey(User.id))
     learned_language_id: Mapped[uuid.UUID] = mapped_column(ForeignKey(Language.id))
     target_language_id: Mapped[uuid.UUID] = mapped_column(ForeignKey(Language.id))
+
+    __table_args__ = (UniqueConstraint('user_id', 'learned_language_id', 'target_language_id', name='_user_languages_uc'),)
 
     user: Mapped[User] = relationship(foreign_keys='Dictionary.user_id', back_populates='dictionaries')
     words: Mapped['Word'] = relationship(back_populates='dictionary')

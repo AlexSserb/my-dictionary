@@ -6,7 +6,7 @@ from flask_jwt_extended import JWTManager
 
 from datetime import datetime
 
-from .models import db, User
+from .database import db, User
 
 
 def create_app(config_name='app.config.Config'):
@@ -18,7 +18,9 @@ def create_app(config_name='app.config.Config'):
     db.init_app(app)
     migrate = Migrate(app, db)
 
-    from app.blueprints import accounts
+    from app.blueprints import accounts, dictionaries, languages
     app.register_blueprint(accounts)
+    app.register_blueprint(dictionaries)
+    app.register_blueprint(languages)
 
     return app

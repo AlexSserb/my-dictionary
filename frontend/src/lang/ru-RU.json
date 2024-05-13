@@ -1,0 +1,21 @@
+{
+    "msg": "Привет",
+
+    "language_choice_header": "Язык",
+    "change_password_btn": "Изменить пароль",
+    "submit_change_password_btn": "Изменить",
+    "password_change_header": "Изменение пароля",
+    "logout_btn": "Выйти",
+    "settings": "Настройки",
+
+    "sidebar.dict_title": "Словарь",
+    "sidebar.dict_edit_button": "Редактировать словари",
+
+    "modal_dicts.title": "Редактирование списка словарей",
+    "modal_dicts.create_dictionary_btn": "Создать словарь",
+    "modal_dicts.dict_create_error_same_langs": "Ошибка. Языки должны быть разными.",
+    "modal_dicts.dict_create_error_dict_already_exists": "Ошибка. Такой словарь уже есть.",
+    "modal_dicts.no_dicts": "Словарей нет. Создайте свой первый словарь!",
+    "studied_lang": "Изученный язык",
+    "target_lang": "Изучаемый язык"
+}

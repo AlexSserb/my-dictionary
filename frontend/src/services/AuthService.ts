@@ -1,7 +1,7 @@
 import axiosConfig from '../axiosConfig';
 import axios from 'axios';
 
-const API_URL = 'accounts';
+const API_URL = 'accounts/';
 
 class AuthService {
 	axiosInstanceWithRefreshToken = axios.create({
@@ -13,35 +13,35 @@ class AuthService {
 			const authTokens = localStorage.getItem('authTokens');
 			
 			if (authTokens) {
-				config.headers['Authorization'] = 'Bearer ' + JSON.parse(authTokens).refresh_token;
+				config.headers['Authorization'] = 'Bearer ' + JSON.parse(authTokens).refreshToken;
 			}
 		
 			return config;
 		});
 	}
 
-	login(email: string, password: string) {
-		return axiosConfig.post(API_URL + '/login',
+	login(username: string, password: string) {
+		return axiosConfig.post(API_URL + 'login',
 			{
-				email: email,
+				username: username,
 				password: password
 			});
 	}
 
-	register(email: string, password: string) {
-		return axiosConfig.post(API_URL + '/register',
+	register(username: string, password: string) {
+		return axiosConfig.post(API_URL + 'register',
 			{
-				email: email,
+				username: username,
 				password: password 
 			});
 	}
 
 	refresh() {
-		return this.axiosInstanceWithRefreshToken.post(API_URL + '/refresh');
+		return this.axiosInstanceWithRefreshToken.post(API_URL + 'refresh');
 	}
 
 	changePassword(oldPassword: string, newPassword: string) {
-		return axiosConfig.post(API_URL + '/password-change', { 
+		return axiosConfig.post(API_URL + 'password-change', { 
 		  oldPassword: oldPassword, 
 		  newPassword: newPassword
 		});

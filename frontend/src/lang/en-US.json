@@ -1,0 +1,21 @@
+{
+    "msg": "Hello",
+
+    "language_choice_header": "Language",
+    "change_password_btn": "Change password",
+    "submit_change_password_btn": "Submit",
+    "password_change_header": "Password change",
+    "logout_btn": "Log out",
+    "settings": "Settings",
+
+    "sidebar.dict_title": "Dictionary",
+    "sidebar.dict_edit_button": "Edit dictionaries",
+
+    "modal_dicts.title": "List of dictionaries editing",
+    "modal_dicts.create_dictionary_btn": "Create dictionary",
+    "modal_dicts.dict_create_error_same_langs": "Error. Languages must be different.",
+    "modal_dicts.dict_create_error_dict_already_exists": "Error. The dictionary already exists.",
+    "modal_dicts.no_dicts": "No dictionaries. Create your first dictionary!",
+    "studied_lang": "Learned language",
+    "target_lang": "Target language"
+}

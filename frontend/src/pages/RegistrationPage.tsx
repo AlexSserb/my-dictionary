@@ -46,7 +46,7 @@ const RegistrationPage = () => {
         minWidth: '500px',
         spacing: 3
       }}>
-        <Paper elevation={5} sx={{ padding: 3, marginTop: 3 }}>
+        <Paper elevation={5} sx={{ padding: 3, marginTop: 3, backgroundColor: 'secondary.main' }}>
           <Typography textAlign={'center'} variant='h5' component='h5' sx={{ paddingBlockEnd: 3 }}>
             Registration
           </Typography>
@@ -54,11 +54,12 @@ const RegistrationPage = () => {
             <form onSubmit={handleRegister}>
               <FormControl sx={{ paddingBlockEnd: 3 }}>
                 <TextField
-                  label='Email'
-                  type='email'
-                  name='email'
+                  label='Username'
+                  type='text'
+                  name='username'
                   required
                   inputProps={{ maxLength: 64 }}
+                  color='info'
                 />
               </FormControl><br />
               <FormControl sx={{ paddingBlockEnd: 3 }}>
@@ -68,6 +69,7 @@ const RegistrationPage = () => {
                   name='password'
                   required
                   inputProps={{ maxLength: 20 }}
+                  color='info'
                 />
               </FormControl><br />
               <FormControl sx={{ paddingBlockEnd: 3 }}>
@@ -77,6 +79,7 @@ const RegistrationPage = () => {
                   name='passwordRepeat'
                   required
                   inputProps={{ maxLength: 20 }}
+                  color='info'
                 />
               </FormControl><br />
               {message && (

@@ -51,10 +51,10 @@ export const AuthProvider = ({ children }: any) => {
         setMessage('');
         const target = e.currentTarget.elements;
 
-        authService.login(target.email.value, target.password.value)
+        authService.login(target.username.value, target.password.value)
             .then(res => {
                 setAuthTokens(res.data);
-                setUser(jwtDecode(res.data.access_token));
+                setUser(jwtDecode(res.data.accessToken));
                 localStorage.setItem('authTokens', JSON.stringify(res.data));
                 navigate('/');
             })
@@ -73,10 +73,10 @@ export const AuthProvider = ({ children }: any) => {
         e.preventDefault();
         const target = e.currentTarget.elements;
 
-        authService.register(target.email.value, target.password.value)
+        authService.register(target.username.value, target.password.value)
             .then(res => {
                 setAuthTokens(res.data);
-                setUser(jwtDecode(res.data.access_token));
+                setUser(jwtDecode(res.data.accessToken));
                 localStorage.setItem('authTokens', JSON.stringify(res.data));
                 navigate('/');
             })
@@ -112,7 +112,7 @@ export const AuthProvider = ({ children }: any) => {
         authService.refresh()
             .then((res) => {
                 setAuthTokens(res.data);
-                setUser(jwtDecode(res.data.access_token));
+                setUser(jwtDecode(res.data.accessToken));
                 localStorage.setItem('authTokens', JSON.stringify(res.data));
             })
             .catch(_ => logoutUser())

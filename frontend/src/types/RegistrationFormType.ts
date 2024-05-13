@@ -1,5 +1,5 @@
 interface RegistrationFormElements extends HTMLFormControlsCollection {
-    email: HTMLInputElement;
+    username: HTMLInputElement;
     password: HTMLInputElement;
     passwordRepeat: HTMLInputElement;
     confirmPassword: HTMLInputElement;
