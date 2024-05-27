@@ -11,6 +11,7 @@ import LoginPage from './pages/LoginPage';
 import RegistrationPage from './pages/RegistrationPage';
 import ApplicationBar from './compontents/AppBar';
 import SettingsPage from './pages/SettingsPage';
+import WordPage from './pages/WordPage';
 import theme from './theme';
 
 import { LOCALES } from './i18n/locales';
@@ -41,6 +42,7 @@ function App() {
                 <Route path='/registration' element={<RegistrationPage />} />
                 <Route path='/login' element={<LoginPage />} />
                 <Route path='/settings' element={<SettingsPage currentLocale={currentLocale} handleLangChange={handleLangChange} />} />
+                <Route path='/word' element={<WordPage />} />
               </Routes>
             </AuthProvider>
           </BrowserRouter>

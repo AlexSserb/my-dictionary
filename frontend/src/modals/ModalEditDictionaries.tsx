@@ -29,10 +29,10 @@ type ModalEditDictionariesProps = {
 	dicts: Array<Dictionary>;
 	setDicts: React.Dispatch<React.SetStateAction<Dictionary[]>>;
 	currentDictId: UUID | null;
-	setCurrentDictId: React.Dispatch<React.SetStateAction<UUID | null>>;
+	setCurrentDict: (dictId: UUID) => void;
 }
 
-const ModalEditDictionaries = ({ dicts, setDicts, currentDictId, setCurrentDictId }: ModalEditDictionariesProps) => {
+const ModalEditDictionaries = ({ dicts, setDicts, currentDictId, setCurrentDict }: ModalEditDictionariesProps) => {
 	const [open, setOpen] = useState(false);
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
@@ -84,6 +84,7 @@ const ModalEditDictionaries = ({ dicts, setDicts, currentDictId, setCurrentDictI
 		dictionaryService.createDictionary(firstLangId, secondLangId)
 			.then(res => {
 				setDicts([res.data, ...dicts]);
+				setCurrentDict(res.data.id);
 			})
 			.catch(err => {
 				console.log(err);
@@ -95,8 +96,8 @@ const ModalEditDictionaries = ({ dicts, setDicts, currentDictId, setCurrentDictI
 		dictionaryService.deleteDictionary(id)
             .then(_ => {
                 const dictionaries = dicts.filter(d => d.id !== id);
-				if (currentDictId === id && dictionaries.length > 0) {
-					setCurrentDictId(dictionaries[0].id);
+				if (currentDictId === id && dictionaries.length >= 0) {
+					setCurrentDict(dictionaries[0]?.id);
 				}
 				setDicts(dictionaries);
             })

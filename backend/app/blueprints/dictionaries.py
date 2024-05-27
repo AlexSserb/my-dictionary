@@ -21,8 +21,8 @@ def get_dictionaries():
 
     dicts = [DictionarySchema(
         id=d.id, 
-        learned_language=LanguageSchema(id=d.learned_language.id, name=d.learned_language.name), 
-        target_language=LanguageSchema(id=d.target_language.id, name=d.target_language.name)
+        learned_language=LanguageSchema(id=d.learned_language.id, name=d.learned_language.name, code=d.learned_language.code), 
+        target_language=LanguageSchema(id=d.target_language.id, name=d.target_language.name, code=d.target_language.code)
     ) for d in dicts]
     return jsonify(ListOfDictionariesSchema(dictionaries=dicts).model_dump(by_alias=True)), 200
 
@@ -43,8 +43,10 @@ def create_dict(body: CreateDictionarySchema):
 
         return jsonify(DictionarySchema(
             id=dictionary.id,
-            learned_language=LanguageSchema(id=dictionary.learned_language.id, name=dictionary.learned_language.name), 
-            target_language=LanguageSchema(id=dictionary.target_language.id, name=dictionary.target_language.name)
+            learned_language=LanguageSchema(id=dictionary.learned_language.id,
+                name=dictionary.learned_language.name, code=dictionary.learned_language.code), 
+            target_language=LanguageSchema(id=dictionary.target_language.id, 
+                name=dictionary.target_language.name, code=dictionary.target_language.code)
         ).model_dump(by_alias=True)), 200
 
     except Exception as ex:

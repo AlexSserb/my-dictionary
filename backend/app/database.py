@@ -7,13 +7,15 @@ from sqlalchemy.sql import func
 from sqlalchemy.orm import (
     Mapped, mapped_column, relationship
 )
-
+from typing import List
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import current_app
 
 from datetime import datetime
 import os
 import uuid
+
+from .schemes import WordTranslationSchema, WordSchema
 
 db = SQLAlchemy()
 
@@ -26,7 +28,7 @@ class User(db.Model):
     password_hash: Mapped[str] = mapped_column(String(256))
     created_on: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
-    dictionaries: Mapped['Dictionary'] = relationship(back_populates='user')
+    dictionaries: Mapped[List['Dictionary']] = relationship(back_populates='user')
 
     def __repr__(self):
         return f'User(username={self.username})'
@@ -50,6 +52,7 @@ class Language(db.Model):
 
     id: Mapped[uuid.UUID] = mapped_column(default=uuid.uuid4, primary_key=True)
     name: Mapped[str] = mapped_column(String(128), index=True, unique=True)
+    code: Mapped[str] = mapped_column(String(5), unique=True)
 
     dictionaries_where_lang_learned: Mapped['Dictionary'] = relationship(foreign_keys='Dictionary.learned_language_id',
         back_populates='learned_language')
@@ -59,11 +62,12 @@ class Language(db.Model):
     def to_json(self) -> dict:
         return {
             'id': self.id,
-            'name': self.name
+            'name': self.name,
+            'id': self.id
         }
 
     @classmethod
-    def get_all(cls) -> list:
+    def get_all(cls) -> List:
         """
         returns all languages
         """
@@ -82,7 +86,7 @@ class Dictionary(db.Model):
     __table_args__ = (UniqueConstraint('user_id', 'learned_language_id', 'target_language_id', name='_user_languages_uc'),)
 
     user: Mapped[User] = relationship(foreign_keys='Dictionary.user_id', back_populates='dictionaries')
-    words: Mapped['Word'] = relationship(back_populates='dictionary')
+    words: Mapped[List['Word']] = relationship(back_populates='dictionary', cascade='all,delete')
 
     learned_language: Mapped[Language] = relationship(foreign_keys='Dictionary.learned_language_id',
         back_populates='dictionaries_where_lang_learned')
@@ -90,9 +94,9 @@ class Dictionary(db.Model):
         back_populates='dictionaries_where_lang_target')
 
     @classmethod
-    def get_for_user(cls, user: User) -> list:
+    def get_for_user(cls, user: User) -> List:
         """
-        returns a list of dictionaries for the given user
+        returns a List of dictionaries for the given user
         """
         query = select(Dictionary).where(Dictionary.user == user)
         return db.session.execute(query).scalars().all()
@@ -106,16 +110,22 @@ class Word(db.Model):
     dictionary_id: Mapped[uuid.UUID] = mapped_column(ForeignKey(Dictionary.id))
 
     dictionary: Mapped[Dictionary] = relationship(back_populates='words')
-    translations: Mapped['WordTranslation'] = relationship(back_populates='word')
+    translations: Mapped[List['WordTranslation']] = relationship(back_populates='word', cascade='all,delete')
 
     @classmethod
-    def get_for_dictionary(cls, dictionary: Dictionary) -> list:
+    def get_for_dictionary(cls, dictionary: Dictionary) -> List:
         """
-        returns a list of words for given dictionary
+        returns a List of words for given dictionary
         """
         query = select(Word).where(Word.dictionary == dictionary)
         return db.session.execute(query).scalars().all()
 
+    def to_schema(self) -> WordSchema:
+        return WordSchema(
+            id=self.id,
+            word=self.word,
+            translations=[translation.to_schema() for translation in self.translations]
+        )
 
 class WordTranslation(db.Model):
     __tablename__ = 'word_translation'
@@ -127,11 +137,17 @@ class WordTranslation(db.Model):
     word: Mapped[Word] = relationship(back_populates='translations')
 
     @classmethod 
-    def get_words_and_translations_for_dictionary(cls, dictionary: Dictionary) -> list[tuple]:
+    def get_words_and_translations_for_dictionary(cls, dictionary: Dictionary) -> List[tuple]:
         """
-        returns a list of tuples: [(word, translation),]
+        returns a List of tuples: [(word, translation),]
         """
         query = select(Word.word, WordTranslation.translation) \
             .join(cls) \
             .where(Word.dictionary == dictionary)
         return db.session.execute(query).all()
+
+    def to_schema(self) -> WordTranslationSchema:
+        return WordTranslationSchema(
+            id=self.id,
+            translation=self.translation
+        )

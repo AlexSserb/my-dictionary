@@ -1,6 +1,4 @@
 {
-    "msg": "Hello",
-
     "language_choice_header": "Language",
     "change_password_btn": "Change password",
     "submit_change_password_btn": "Submit",
@@ -17,5 +15,23 @@
     "modal_dicts.dict_create_error_dict_already_exists": "Error. The dictionary already exists.",
     "modal_dicts.no_dicts": "No dictionaries. Create your first dictionary!",
     "studied_lang": "Learned language",
-    "target_lang": "Target language"
+    "target_lang": "Target language",
+
+    "wordlist.title": "Your words",
+    "wordlist.add_new_word": "Add new word",
+    "wordlist.no_words": "There are no words in the dictionary. Add the first one!",
+
+    "wordpage.word_field_label": "Word",
+    "wordpage.title": "Adding a new word",
+    "wordpage.dict_field_label": "Dictionary: ",
+    "wordpage.translation_field_label": "Translation",
+    "wordpage.translate_button": "Translate",
+    "wordpage.add_translation_button": "Add translation",
+    "wordpage.save_button": "Save the word",
+    "wordpage.error_word_exists": "Word already exists in your dictionary.",
+    "wordpage.error_word_must_have_translation": "Word must have at least one translation.",
+    "wordpage.modal_delete_word.title": "Confirmation of word deletion",
+    "wordpage.modal_delete_word.body": "Are you sure you want to delete this word?",
+    "wordpage.modal_delete_word.yes": "Yes",
+    "wordpage.modal_delete_word.no": "No"
 }

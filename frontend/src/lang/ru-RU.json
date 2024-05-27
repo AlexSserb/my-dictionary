@@ -1,6 +1,4 @@
 {
-    "msg": "Привет",
-
     "language_choice_header": "Язык",
     "change_password_btn": "Изменить пароль",
     "submit_change_password_btn": "Изменить",
@@ -17,5 +15,23 @@
     "modal_dicts.dict_create_error_dict_already_exists": "Ошибка. Такой словарь уже есть.",
     "modal_dicts.no_dicts": "Словарей нет. Создайте свой первый словарь!",
     "studied_lang": "Изученный язык",
-    "target_lang": "Изучаемый язык"
+    "target_lang": "Изучаемый язык",
+
+    "wordlist.title": "Ваши слова",
+    "wordlist.add_new_word": "Новое слово",
+    "wordlist.no_words": "В словаре нет слов. Добавьте первое слово!",
+
+    "wordpage.word_field_label": "Слово",
+    "wordpage.title": "Добавление нового слова",
+    "wordpage.dict_field_label": "Словарь: ",
+    "wordpage.translation_field_label": "Перевод",
+    "wordpage.translate_button": "Перевести",
+    "wordpage.add_translation_button": "Добавить перевод",
+    "wordpage.save_button": "Сохранить слово в словаре",
+    "wordpage.error_word_exists": "Слово уже есть в Вашем словаре.",
+    "wordpage.error_word_must_have_translation": "Слово должно иметь хотя бы один перевод.",
+    "wordpage.modal_delete_word.title": "Подтверждение удаления слова",
+    "wordpage.modal_delete_word.body": "Вы уверены, что хотите удалить слово?",
+    "wordpage.modal_delete_word.yes": "Да",
+    "wordpage.modal_delete_word.no": "Нет"
 }

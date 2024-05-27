@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { UUID } from 'crypto';
 import {
   Grid, Stack, MenuItem, Select,
@@ -8,23 +8,44 @@ import {
 } from '@mui/material';
 
 import dictionaryService from '../services/DictionaryService';
+import wordService from '../services/WordService';
 import Dictionary from '../types/DictionaryType';
 import ModalEditDictionaries from '../modals/ModalEditDictionaries';
 import AuthContext from '../context/AuthContext';
+import WordList from '../compontents/WordList';
+import { WordType } from '../types/WordType';
 
 
 const HomePage = () => {
   const { authTokens } = useContext(AuthContext);
+  const { state } = useLocation();
+
   const [dicts, setDicts] = useState<Array<Dictionary>>([]);
-  const [currentDictId, setCurrentDictId] = useState<UUID | null>(null);
+  const [currentDictId, setCurrentDictId] = useState<UUID | null>(state?.dictId ? state.dictId : null);
+  const [words, setWords] = useState<Array<WordType>>([]);
   const navigate = useNavigate();
+
+  const getWords = (dictId: UUID) => {
+		wordService.getWords(dictId)
+			.then(res => {
+				setWords(res.data?.words);
+			})
+			.catch(err => {
+				console.log(err);
+			});
+	}
+
+  const setCurrentDict = (dictId: UUID) => {
+    setCurrentDictId(dictId);
+    getWords(dictId);
+  }
 
   const getDictionaries = () => {
     dictionaryService.getDictionaries()
       .then(res => {
         if (res.data?.dictionaries.length > 0) {
           setDicts(res.data.dictionaries);
-          setCurrentDictId(res.data.dictionaries[0].id);
+          setCurrentDict(state?.dictId ? state.dictId : res.data.dictionaries[0].id);
         }
       })
       .catch(err => {
@@ -42,20 +63,22 @@ const HomePage = () => {
   }, [])
 
   const handleDictChange = (e: any) => {
-    setCurrentDictId(e.target.value);
+    setCurrentDict(e.target.value);
   }
 
   return (
-    <Grid container sx={{ padding: 2, direction: 'row' }}>
+    <Grid container sx={{ padding: 2, gap: 2 }}>
       <Stack sx={{
         width: '23%',
+        height: '100%',
         bgcolor: 'secondary.main',
-        padding: 3,
+        paddingX: 3,
+        paddingY: 2,
         borderRadius: 2,
         gap: 1,
         justifyContent: 'space-between',
       }}>
-        <Typography>
+        <Typography variant='h6'>
           <FormattedMessage id='sidebar.dict_title' />
         </Typography>
         <Paper sx={{ bgcolor: 'primary.main' }}>
@@ -68,11 +91,9 @@ const HomePage = () => {
             ))}
           </Select>
         </Paper>
-        <ModalEditDictionaries dicts={dicts} setDicts={setDicts} currentDictId={currentDictId} setCurrentDictId={setCurrentDictId} />
+        <ModalEditDictionaries dicts={dicts} setDicts={setDicts} currentDictId={currentDictId} setCurrentDict={setCurrentDict} />
       </Stack>
-      <Stack sx={{ paddingLeft: 2 }}>
-        <FormattedMessage id='msg' />
-      </Stack>
+      <WordList words={words} setWords={setWords} dict={dicts.find(dict => dict.id === currentDictId)} />
     </Grid>
   )
 }

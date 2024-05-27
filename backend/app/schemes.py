@@ -35,6 +35,7 @@ class TokenPairSchema(CommonModel):
 class LanguageSchema(CommonModel):
     id: UUID
     name: str
+    code: str
 
 class DictionarySchema(CommonModel):
     id: UUID
@@ -55,3 +56,39 @@ class CreateDictionarySchema(CommonModel):
         if self.learned_language_id == self.target_language_id:
             raise ValueError('Languages must be different')
         return self
+
+
+class WordTranslationSchema(CommonModel):
+    id: UUID
+    translation: str
+
+
+class WordSchema(CommonModel):
+    id: UUID
+    word: str
+    translations: list[WordTranslationSchema]
+
+class SaveWordSchema(WordSchema):
+    """
+    Schema for body validation for save word requests
+    """
+    dictionary_id: UUID
+
+
+class ListOfWordsSchema(CommonModel):
+    words: list[WordSchema]
+    
+
+class TranslateSchema(CommonModel):
+    """
+    Schema for body validation for translation requests
+    """
+    language_from: LanguageSchema
+    language_to: LanguageSchema
+    text: str
+
+class TranslationGoogleResult(CommonModel):
+    """
+    Schema for google translation response
+    """
+    translations: list[WordTranslationSchema] | None
