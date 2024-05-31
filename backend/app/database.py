@@ -15,7 +15,7 @@ from datetime import datetime
 import os
 import uuid
 
-from .schemes import WordTranslationSchema, WordSchema
+from .schemes import WordTranslationSchema, WordSchema, SaveWordSchema, LanguageSchema
 
 db = SQLAlchemy()
 
@@ -39,12 +39,20 @@ class User(db.Model):
     def check_password(self, password: str):
         return check_password_hash(self.password_hash, password)
 
-    @classmethod
-    def get_by_identity(cls, username: str):
-        query = select(cls).where(cls.username == username)
+    @staticmethod
+    def get_by_identity(username: str):
+        query = select(User).where(User.username == username)
         user = db.session.execute(query).one_or_none()
         if user:
             return user[0]
+
+    @staticmethod
+    def register(username: str, password: str):
+        user = User(username=username)
+        user.set_password(password)
+        db.session.add(user)
+        db.session.commit()
+        return user
 
 
 class Language(db.Model):
@@ -59,15 +67,15 @@ class Language(db.Model):
     dictionaries_where_lang_target: Mapped['Dictionary'] = relationship(foreign_keys='Dictionary.target_language_id',
         back_populates='target_language')
 
-    def to_json(self) -> dict:
-        return {
-            'id': self.id,
-            'name': self.name,
-            'id': self.id
-        }
+    def to_schema(self) -> LanguageSchema:
+        return LanguageSchema(
+            id=self.id,
+            name=self.name,
+            code=self.code,
+        )
 
-    @classmethod
-    def get_all(cls) -> List:
+    @staticmethod
+    def get_all() -> List:
         """
         returns all languages
         """
@@ -112,8 +120,8 @@ class Word(db.Model):
     dictionary: Mapped[Dictionary] = relationship(back_populates='words')
     translations: Mapped[List['WordTranslation']] = relationship(back_populates='word', cascade='all,delete')
 
-    @classmethod
-    def get_for_dictionary(cls, dictionary: Dictionary) -> List:
+    @staticmethod
+    def get_for_dictionary(dictionary: Dictionary) -> List:
         """
         returns a List of words for given dictionary
         """
@@ -126,6 +134,21 @@ class Word(db.Model):
             word=self.word,
             translations=[translation.to_schema() for translation in self.translations]
         )
+
+    def save(word_data: SaveWordSchema):
+        try:
+            word = Word(id=word_data.id, word=word_data.word, dictionary_id=word_data.dictionary_id)
+            db.session.add(word)
+
+            for translation_obj in word_data.translations:
+                translation = WordTranslation(id=translation_obj.id, translation=translation_obj.translation, word_id=word.id)
+                db.session.add(translation)
+
+            db.session.commit()
+
+        except Exception as ex:
+            db.session.rollback()
+            raise ex
 
 class WordTranslation(db.Model):
     __tablename__ = 'word_translation'

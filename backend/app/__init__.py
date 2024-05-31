@@ -18,11 +18,18 @@ def create_app(config_name='app.config.Config'):
     db.init_app(app)
     migrate = Migrate(app, db)
 
-    from app.blueprints import accounts, dictionaries, languages, words, translations
-    app.register_blueprint(accounts)
-    app.register_blueprint(dictionaries)
-    app.register_blueprint(languages)
-    app.register_blueprint(words)
-    app.register_blueprint(translations)
+    from app.blueprints import (
+        accounts_bp,
+        dictionaries_bp,
+        languages_bp,
+        words_bp,
+        translations_bp,
+    )
+    
+    app.register_blueprint(accounts_bp)
+    app.register_blueprint(dictionaries_bp)
+    app.register_blueprint(languages_bp)
+    app.register_blueprint(words_bp)
+    app.register_blueprint(translations_bp)
 
     return app

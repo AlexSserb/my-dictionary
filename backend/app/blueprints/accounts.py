@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+import jwt
 from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
@@ -10,6 +11,7 @@ from flask_jwt_extended import (
 )
 from flask_pydantic import validate
 
+
 from ..database import User, db
 from ..schemes import LoginSchema, RegisterSchema, ChangePasswordSchema, TokenPairSchema
 
@@ -17,8 +19,9 @@ bp = Blueprint('accounts', __name__, url_prefix='/accounts')
 
 
 def create_tokens(identity: str):
-    access_token = create_access_token(identity=identity)
-    refresh_token = create_refresh_token(identity=identity)
+    payload = { 'username': identity }
+    access_token = create_access_token(identity=identity, additional_claims=payload)
+    refresh_token = create_refresh_token(identity=identity, additional_claims=payload)
     return TokenPairSchema(access_token=access_token, refresh_token=refresh_token)
 
 
@@ -27,7 +30,10 @@ def create_tokens(identity: str):
 def login(body: LoginSchema):
     user = User.get_by_identity(body.username)
 
-    if user is None or not user.check_password(body.password):
+    if user is None:
+        return jsonify({'message': 'User not found'}), 404
+
+    if not user.check_password(body.password):
         return jsonify({'message': 'Incorrect username or password'}), 400
     
     return jsonify(create_tokens(user.username).model_dump(by_alias=True))
@@ -39,10 +45,7 @@ def register(body: RegisterSchema):
     if User.get_by_identity(body.username):
         return jsonify({'message': 'Username already registered'}), 409
 
-    user = User(username=body.username)
-    user.set_password(body.password)
-    db.session.add(user)
-    db.session.commit()
+    user = User.register(body.username, body.password)
 
     return jsonify(create_tokens(user.username).model_dump(by_alias=True))
 

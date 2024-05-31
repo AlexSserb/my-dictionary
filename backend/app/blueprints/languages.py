@@ -1,9 +1,6 @@
 from flask import Blueprint, jsonify, request
-from flask_jwt_extended import (
-    get_jwt_identity,
-    jwt_required
-)
-from ..database import User, Dictionary, Word, WordTranslation, Language, db
+from flask_jwt_extended import jwt_required
+from ..database import Language
 
 bp = Blueprint('languages', __name__, url_prefix='/languages')
 

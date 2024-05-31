@@ -27,19 +27,11 @@ def get_words(dict_id: UUID):
 @validate()
 def save_word(body: SaveWordSchema):
     try:
-        word = Word(id=body.id, word=body.word, dictionary_id=body.dictionary_id)
-        db.session.add(word)
-
-        for translation_obj in body.translations:
-            translation = WordTranslation(id=translation_obj.id, translation=translation_obj.translation, word_id=word.id)
-            db.session.add(translation)
-
-        db.session.commit()
+        Word.save(body)
 
         return jsonify({'success': True}), 200
-
+        
     except Exception as ex:
-        db.session.rollback()
         return jsonify({'error': str(ex)}), 400
 
 
