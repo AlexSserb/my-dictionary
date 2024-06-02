@@ -17,21 +17,25 @@ import wordService from '../services/WordService';
 
 
 const WordPage = () => {
-	const { authTokens } = useContext(AuthContext);
-	const [word, setWord] = useState<NewWordType>({ word: '', translations: [] });
-	const [message, setMessage] = useState('');
-	const [curTrans, setCurTrans] = useState<WordTranslationType>({ id: uuidv4(), translation: "" });
-
 	const intl = useIntl();
 	const navigate = useNavigate();
 	const { state } = useLocation();
 	const words: WordType[] = state.words;
 	const dict: Dictionary = state.dict;
 
+	const { authTokens } = useContext(AuthContext);
+	const [word, setWord] = useState<WordType>({ id: uuidv4(), word: '', translations: [], dictionaryId: dict.id });
+	const [message, setMessage] = useState('');
+	const [curTrans, setCurTrans] = useState<WordTranslationType>({ id: uuidv4(), translation: "" });
+
 	useEffect(() => {
 		if (!authTokens || !authTokens.accessToken) {
 			navigate("/login");
 			return;
+		}
+
+		if (state.word) {
+			setWord({ ...state.word,  });
 		}
 	}, [])
 
@@ -42,8 +46,7 @@ const WordPage = () => {
 			text: word.word
 		})
 			.then(res => {
-				setWord({ word: word.word, translations: res.data.translations });
-				console.log(res.data);
+				setWord({ ...word, translations: res.data.translations });
 			})
 			.catch(err => {
 				console.log(err);
@@ -51,33 +54,24 @@ const WordPage = () => {
 	}
 
 	const addTranslation = () => {
-		setWord({ word: word.word, translations: [...word.translations, curTrans] });
+		setWord({ ...word, translations: [...word.translations, curTrans] });
 		setCurTrans({ id: uuidv4(), translation: "" });
 	}
 
 	const removeTranslation = (translation: WordTranslationType) => {
-		setWord({ word: word.word, translations: word.translations.filter(t => t.id !== translation.id) });
-	}
-
-	const newWordToWord = (newWord: NewWordType): WordType => {
-		return {
-			id: uuidv4(),
-			word: newWord.word,
-			translations: newWord.translations,
-			dictionary_id: dict.id
-		}
+		setWord({ ...word, translations: word.translations.filter(t => t.id !== translation.id) });
 	}
 
 	const saveWord = () => {
 		setMessage('');
-		if (words.find(item => item.word === word.word)) {
+		if (!word.word && words.find(item => item.word === word.word)) {
 			setMessage(intl.formatMessage({ id: 'wordpage.error_word_exists' }));
 		}
 		else if (word.translations.length === 0) {
 			setMessage(intl.formatMessage({ id: 'wordpage.error_word_must_have_translation' }));
 		}
 		else {
-			wordService.saveWord(newWordToWord(word))
+			wordService.saveWord(word)
 				.then(_ => {
 					navigate('/', { state: { dictId: dict.id } });
 				})
@@ -106,7 +100,10 @@ const WordPage = () => {
 				justifyContent: 'space-between',
 			}}>
 				<Typography variant='h5' paddingBottom={2}>
-					<FormattedMessage id='wordpage.title' />
+					{
+						state.word ? <FormattedMessage id='wordpage.title_edit' />
+                        : <FormattedMessage id='wordpage.title_add' />
+					}
 				</Typography>
 				<Box textAlign='left' display='grid' gap={2}>
 					<Typography color='info'>
@@ -121,7 +118,8 @@ const WordPage = () => {
 							<Stack direction='row' gap={2}>
 								<Box sx={fieldBoxStyle}>
 									<TextField
-										onChange={e => setWord({ word: e.target.value, translations: word.translations })}
+										value={word.word}
+										onChange={e => setWord({ ...word, word: e.target.value })}
 										type='text'
 										required
 									/>

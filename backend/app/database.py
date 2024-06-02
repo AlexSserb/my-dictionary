@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import (
-    String, DateTime, select, ForeignKey
+    String, DateTime, select, ForeignKey, update, delete
 )
 from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.sql import func
@@ -15,7 +15,7 @@ from datetime import datetime
 import os
 import uuid
 
-from .schemes import WordTranslationSchema, WordSchema, SaveWordSchema, LanguageSchema
+from .schemes import WordTranslationSchema, WordSchema, LanguageSchema
 
 db = SQLAlchemy()
 
@@ -94,7 +94,7 @@ class Dictionary(db.Model):
     __table_args__ = (UniqueConstraint('user_id', 'learned_language_id', 'target_language_id', name='_user_languages_uc'),)
 
     user: Mapped[User] = relationship(foreign_keys='Dictionary.user_id', back_populates='dictionaries')
-    words: Mapped[List['Word']] = relationship(back_populates='dictionary', cascade='all,delete')
+    words: Mapped[List['Word']] = relationship('Word', back_populates='dictionary', cascade='all,delete')
 
     learned_language: Mapped[Language] = relationship(foreign_keys='Dictionary.learned_language_id',
         back_populates='dictionaries_where_lang_learned')
@@ -115,9 +115,10 @@ class Word(db.Model):
 
     id: Mapped[uuid.UUID] = mapped_column(default=uuid.uuid4, primary_key=True)
     word: Mapped[str] = mapped_column(String(128), index=True, unique=True)
-    dictionary_id: Mapped[uuid.UUID] = mapped_column(ForeignKey(Dictionary.id))
 
-    dictionary: Mapped[Dictionary] = relationship(back_populates='words')
+    dictionary_id: Mapped[uuid.UUID] = mapped_column(ForeignKey(Dictionary.id))
+    dictionary: Mapped[Dictionary] = relationship('Dictionary', back_populates='words')
+
     translations: Mapped[List['WordTranslation']] = relationship(back_populates='word', cascade='all,delete')
 
     @staticmethod
@@ -132,10 +133,16 @@ class Word(db.Model):
         return WordSchema(
             id=self.id,
             word=self.word,
-            translations=[translation.to_schema() for translation in self.translations]
+            translations=[translation.to_schema() for translation in self.translations],
+            dictionary_id=self.dictionary_id
         )
 
-    def save(word_data: SaveWordSchema):
+    @staticmethod
+    def get_by_id(id):
+        query = select(Word).where(Word.id == id)
+        return db.session.execute(query).one_or_none()
+
+    def create(word_data: WordSchema):
         try:
             word = Word(id=word_data.id, word=word_data.word, dictionary_id=word_data.dictionary_id)
             db.session.add(word)
@@ -149,6 +156,28 @@ class Word(db.Model):
         except Exception as ex:
             db.session.rollback()
             raise ex
+
+    def update(word_data: WordSchema):
+        try:
+            query_update_word = update(Word) \
+                .where(Word.id == word_data.id) \
+                .values(word = word_data.word)
+            db.session.execute(query_update_word)
+
+            query_delete_translations = delete(WordTranslation) \
+                .where(WordTranslation.word_id == word_data.id)
+            db.session.execute(query_delete_translations)
+
+            for translation_obj in word_data.translations:
+                translation = WordTranslation(id=translation_obj.id, translation=translation_obj.translation, word_id=word_data.id)
+                db.session.add(translation)
+
+            db.session.commit()
+
+        except Exception as ex:
+            db.session.rollback()
+            raise ex
+
 
 class WordTranslation(db.Model):
     __tablename__ = 'word_translation'

@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from ..database import Language
+from ..schemes import ListOfLanguagesSchema, LanguageSchema
 
 bp = Blueprint('languages', __name__, url_prefix='/languages')
 
@@ -10,4 +11,10 @@ bp = Blueprint('languages', __name__, url_prefix='/languages')
 def get_languages():
     languages = Language.get_all()
 
-    return jsonify([lang.to_json() for lang in languages]), 200
+    languages = [LanguageSchema(
+        id=lang.id,
+        name=lang.name,
+        code=lang.code
+    ) for lang in languages]
+
+    return jsonify(ListOfLanguagesSchema(languages=languages).model_dump(by_alias=True)), 200

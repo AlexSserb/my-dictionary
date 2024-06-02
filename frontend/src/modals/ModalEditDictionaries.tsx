@@ -46,10 +46,10 @@ const ModalEditDictionaries = ({ dicts, setDicts, currentDictId, setCurrentDict 
 	const getLanguages = () => {
 		languageService.getLanguages()
 			.then(res => {
-				if (res.data.length > 0) {
-					setLanguages(res.data);
-					setFirstLangId(res.data[0].id);
-					setSecondLangId(res.data[0].id);
+				if (res.data.languages.length > 0) {
+					setLanguages(res.data.languages);
+					setFirstLangId(res.data.languages[0].id);
+					setSecondLangId(res.data.languages[0].id);
 				}
 			})
 			.catch(err => {

@@ -7,7 +7,7 @@ from flask_pydantic import validate
 from uuid import UUID
 
 from ..database import User, Dictionary, Word, WordTranslation, Language, db
-from ..schemes import WordSchema, WordTranslationSchema, ListOfWordsSchema, SaveWordSchema
+from ..schemes import WordSchema, WordTranslationSchema, ListOfWordsSchema
 
 bp = Blueprint('words', __name__, url_prefix='/words')
 
@@ -25,9 +25,12 @@ def get_words(dict_id: UUID):
 @bp.route('/save', methods=['POST'])
 @jwt_required()
 @validate()
-def save_word(body: SaveWordSchema):
+def save_word(body: WordSchema):
     try:
-        Word.save(body)
+        if Word.get_by_id(body.id):
+            Word.update(body)
+        else:
+            Word.create(body)
 
         return jsonify({'success': True}), 200
         

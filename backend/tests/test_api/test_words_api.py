@@ -30,8 +30,8 @@ class TestWordsAPI(BaseTestCaseWithoutDB):
         '''
         Test data for test function: test_get_words_for_dict
         '''
-        self.word1 = Word(id=uuid4(), word='word1', dictionary_id=self.dict1)
-        self.word2 = Word(id=uuid4(), word='word2', dictionary_id=self.dict2)
+        self.word1 = Word(id=uuid4(), word='word1', dictionary_id=self.dict1.id)
+        self.word2 = Word(id=uuid4(), word='word2', dictionary_id=self.dict2.id)
 
         self.word_translation1 = WordTranslation(id=uuid4(), translation='translation1', word_id=self.word1.id)
         self.word_translation2 = WordTranslation(id=uuid4(), translation='translation2', word_id=self.word1.id)

@@ -37,6 +37,10 @@ class LanguageSchema(CommonModel):
     name: str
     code: str
 
+class ListOfLanguagesSchema(CommonModel):
+    languages: list[LanguageSchema]
+    
+
 class DictionarySchema(CommonModel):
     id: UUID
     learned_language: LanguageSchema
@@ -67,11 +71,6 @@ class WordSchema(CommonModel):
     id: UUID
     word: str
     translations: list[WordTranslationSchema]
-
-class SaveWordSchema(WordSchema):
-    """
-    Schema for body validation for save word requests
-    """
     dictionary_id: UUID
 
 

@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from app import create_app, db
 from app.database import User, Word, Language, WordTranslation, Dictionary
-from app.schemes import SaveWordSchema
+from app.schemes import WordSchema
 from app.config import Config
 from .. import BaseTestCase
 
@@ -68,8 +68,8 @@ class TestWordModels(BaseTestCase):
         )))
         self.assertEqual(words_and_translations2, [])
     
-    def test_save_words_and_translations(self):
-        data_to_save = SaveWordSchema(**{
+    def test_create_word_and_translations(self):
+        data_to_create = WordSchema(**{
             'id': uuid4(),
             'word': 'example',
             'translations': [
@@ -79,16 +79,44 @@ class TestWordModels(BaseTestCase):
             'dictionary_id': self.dict1.id
         })
 
-        Word.save(data_to_save)
+        Word.create(data_to_create)
 
         with Session(db.engine) as session:
-            saved_word = session.get(Word, data_to_save.id)
+            saved_word = session.get(Word, data_to_create.id)
 
-            self.assertEqual(saved_word.word, data_to_save.word)
-            self.assertEqual(saved_word.dictionary, session.get(Dictionary, data_to_save.dictionary_id))
+            self.assertEqual(saved_word.word, data_to_create.word)
+            self.assertEqual(saved_word.dictionary, session.get(Dictionary, data_to_create.dictionary_id))
             self.assertEqual(set(saved_word.translations), set((
-                session.get(WordTranslation, data_to_save.translations[0].id),
-                session.get(WordTranslation, data_to_save.translations[1].id)
+                session.get(WordTranslation, data_to_create.translations[0].id),
+                session.get(WordTranslation, data_to_create.translations[1].id)
+            )))
+
+    def test_update_word_and_translations(self):
+        word = Word(word='word1', dictionary_id=self.dict1.id)
+        word_translation = WordTranslation(word=word, translation='translation_example')
+        db.session.add_all((word, word_translation))
+        db.session.commit()
+
+        data_to_update = WordSchema(**{
+            'id': word.id,
+            'word': word.word,
+            'translations': [
+                { 'id': word_translation.id, 'translation': 'changed_translation' },
+                { 'id': uuid4(), 'translation': 'new_translation' }
+            ],
+            'dictionary_id': self.dict1.id
+        })
+
+        Word.update(data_to_update)
+
+        with Session(db.engine) as session:
+            saved_word = session.get(Word, data_to_update.id)
+
+            self.assertEqual(saved_word.word, data_to_update.word)
+            self.assertEqual(saved_word.dictionary, session.get(Dictionary, data_to_update.dictionary_id))
+            self.assertEqual(set(saved_word.translations), set((
+                session.get(WordTranslation, data_to_update.translations[0].id),
+                session.get(WordTranslation, data_to_update.translations[1].id)
             )))
 
 

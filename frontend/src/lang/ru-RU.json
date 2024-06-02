@@ -22,7 +22,8 @@
     "wordlist.no_words": "В словаре нет слов. Добавьте первое слово!",
 
     "wordpage.word_field_label": "Слово",
-    "wordpage.title": "Добавление нового слова",
+    "wordpage.title_add": "Добавление нового слова",
+    "wordpage.title_edit": "Редактирование слова",
     "wordpage.dict_field_label": "Словарь: ",
     "wordpage.translation_field_label": "Перевод",
     "wordpage.translate_button": "Перевести",

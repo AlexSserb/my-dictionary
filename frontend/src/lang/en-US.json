@@ -22,7 +22,8 @@
     "wordlist.no_words": "There are no words in the dictionary. Add the first one!",
 
     "wordpage.word_field_label": "Word",
-    "wordpage.title": "Adding a new word",
+    "wordpage.title_add": "Adding a new word",
+    "wordpage.title_edit": "Word editing",
     "wordpage.dict_field_label": "Dictionary: ",
     "wordpage.translation_field_label": "Translation",
     "wordpage.translate_button": "Translate",

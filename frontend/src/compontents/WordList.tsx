@@ -7,6 +7,7 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 import { WordType } from '../types/WordType';
 import WordTranslationType from '../types/WordTranslationType';
@@ -59,6 +60,10 @@ const WordList = ({ words, setWords, dict }: WordListProps) => {
 		setCurWordId('');
 	}
 
+	const handleEditButtonClick = (wordId: string) => {
+		navigate('/word', { state: { dict: dict, words: words, word: words.find(word => word.id === wordId) } })
+	}
+
 	const renderWords = () => {
 		return words.map(word => (
 			<Paper sx={{
@@ -71,9 +76,14 @@ const WordList = ({ words, setWords, dict }: WordListProps) => {
 					<Typography variant='h6'>
 						{word.word}
 					</Typography>
-					<Button variant='contained' onClick={() => handleDeleteButtonClick(word.id)}>
-						<DeleteIcon />
-					</Button>
+					<Stack direction='row' gap={2}>
+						<Button variant='contained' onClick={() => handleEditButtonClick(word.id)}>
+							<EditIcon />
+						</Button>
+						<Button variant='contained' onClick={() => handleDeleteButtonClick(word.id)}>
+							<DeleteIcon />
+						</Button>
+					</Stack>
 				</Stack>
 
 				<Typography variant='body1' sx={{ paddingLeft: 2, paddingTop: 1 }}>
@@ -104,10 +114,10 @@ const WordList = ({ words, setWords, dict }: WordListProps) => {
 			<Stack sx={{ gap: 2 }}>
 				{
 					(words.length === 0) ?
-                	<Typography textAlign='center' variant='h6' paddingBottom={2}>
-						<FormattedMessage id='wordlist.no_words' />
-					</Typography>
-                    : renderWords()
+						<Typography textAlign='center' variant='h6' paddingBottom={2}>
+							<FormattedMessage id='wordlist.no_words' />
+						</Typography>
+						: renderWords()
 				}
 			</Stack>
 

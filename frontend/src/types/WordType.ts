@@ -4,7 +4,7 @@ export interface WordType {
     id: string,
     word: string,
     translations: WordTranslationType[],
-    dictionary_id: string
+    dictionaryId: string
 }
 
 export interface NewWordType {
