@@ -4,10 +4,15 @@ export interface WordType {
     id: string,
     word: string,
     translations: WordTranslationType[],
-    dictionaryId: string
+    dictionaryId: string,
+    progress: number
 }
 
-export interface NewWordType {
-    word: string,
-    translations: WordTranslationType[]
+export interface WordWithPointsType extends WordType {
+    points: number
+}
+
+export interface WordTrainResultType {
+    word_id: string,
+    points: number
 }

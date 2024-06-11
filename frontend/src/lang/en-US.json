@@ -5,9 +5,15 @@
     "password_change_header": "Password change",
     "logout_btn": "Log out",
     "settings": "Settings",
+    
+    "loading": "Loading...",
 
     "sidebar.dict_title": "Dictionary",
     "sidebar.dict_edit_button": "Edit dictionaries",
+
+    "train_sidebar.train_menu_title": "Trainings",
+    "train_sidebar.btn.write_word_for_translation": "Write word for translation",
+    "train_sidebar.no_words_error": "Training is not available for empty dictionary",
 
     "modal_dicts.title": "List of dictionaries editing",
     "modal_dicts.create_dictionary_btn": "Create dictionary",
@@ -34,5 +40,18 @@
     "wordpage.modal_delete_word.title": "Confirmation of word deletion",
     "wordpage.modal_delete_word.body": "Are you sure you want to delete this word?",
     "wordpage.modal_delete_word.yes": "Yes",
-    "wordpage.modal_delete_word.no": "No"
+    "wordpage.modal_delete_word.no": "No",
+
+    "train_word_by_translation.title": "Training",
+    "train_word_by_translation.tranlsations_label": "Translations:",
+    "train_word_by_translation.word_label": "Enter a word for this tranlsations:",
+    "train_word_by_translation.btn_submit": "Submit",
+    "train_word_by_translation.btn_finish_training": "Finish training",
+    "train_word_by_translation.error_wrong_word": "Wrong word",
+
+    "train_results.title": "Training results",
+    "train_results.list_title": "Passed words",
+    "train_results.table_header_word": "Word",
+    "train_results.table_header_points": "Points",
+    "train_results.btn_submit": "Okay"
 }

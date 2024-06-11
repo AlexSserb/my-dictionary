@@ -2,6 +2,7 @@ from app import settings
 from datetime import timedelta
 import os
 
+
 class Config(object):
     DEBUG = True
     DEVELOPMENT = True

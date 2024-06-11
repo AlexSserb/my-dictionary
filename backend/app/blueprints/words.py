@@ -1,18 +1,20 @@
 from flask import Blueprint, jsonify, request
-from flask_jwt_extended import (
-    get_jwt_identity,
-    jwt_required
-)
+from flask_jwt_extended import get_jwt_identity, jwt_required
 from flask_pydantic import validate
 from uuid import UUID
 
 from ..database import User, Dictionary, Word, WordTranslation, Language, db
-from ..schemes import WordSchema, WordTranslationSchema, ListOfWordsSchema
+from ..schemes import (
+    WordSchema,
+    WordTranslationSchema,
+    ListOfWordsSchema,
+    ListOfTrainingResultSchema,
+)
 
-bp = Blueprint('words', __name__, url_prefix='/words')
+bp = Blueprint("words", __name__, url_prefix="/words")
 
 
-@bp.route('/<dict_id>', methods=['GET'])
+@bp.route("/<dict_id>", methods=["GET"])
 @jwt_required()
 def get_words(dict_id: UUID):
     dictionary = db.get_or_404(Dictionary, dict_id)
@@ -22,7 +24,7 @@ def get_words(dict_id: UUID):
     return jsonify(ListOfWordsSchema(words=words).model_dump(by_alias=True)), 200
 
 
-@bp.route('/save', methods=['POST'])
+@bp.route("/save", methods=["POST"])
 @jwt_required()
 @validate()
 def save_word(body: WordSchema):
@@ -32,13 +34,13 @@ def save_word(body: WordSchema):
         else:
             Word.create(body)
 
-        return jsonify({'success': True}), 200
-        
+        return jsonify({"success": True}), 200
+
     except Exception as ex:
-        return jsonify({'error': str(ex)}), 400
+        return jsonify({"error": str(ex)}), 400
 
 
-@bp.route('/<word_id>', methods=['DELETE'])
+@bp.route("/<word_id>", methods=["DELETE"])
 @jwt_required()
 @validate()
 def delete_word(word_id: UUID):
@@ -46,5 +48,17 @@ def delete_word(word_id: UUID):
     db.session.delete(word)
     db.session.commit()
 
-    return jsonify({'success': True}), 200
-    
+    return jsonify({"success": True}), 200
+
+
+@bp.route("/apply-training-results", methods=["POST"])
+@jwt_required()
+@validate()
+def apply_training_results(body: ListOfTrainingResultSchema):
+    try:
+        Word.apply_training_results(body)
+
+        return jsonify({"success": True}), 200
+
+    except Exception as ex:
+        return jsonify({"error": str(ex)}), 400

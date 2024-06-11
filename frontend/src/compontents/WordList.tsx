@@ -13,15 +13,17 @@ import { WordType } from '../types/WordType';
 import WordTranslationType from '../types/WordTranslationType';
 import Dictionary from '../types/DictionaryType';
 import wordService from '../services/WordService';
+import WordCircularProgress from './WordCircularProgress';
 
 
 type WordListProps = {
 	words: WordType[];
 	setWords: React.Dispatch<React.SetStateAction<WordType[]>>;
 	dict: Dictionary | undefined;
+	loading: boolean;
 }
 
-const WordList = ({ words, setWords, dict }: WordListProps) => {
+const WordList = ({ words, setWords, dict, loading }: WordListProps) => {
 	const [open, setOpen] = useState(false);
 	const [curWordId, setCurWordId] = useState('');
 	const navigate = useNavigate();
@@ -73,22 +75,26 @@ const WordList = ({ words, setWords, dict }: WordListProps) => {
 				paddingX: 3
 			}}>
 				<Stack justifyContent='space-between' direction='row'>
-					<Typography variant='h6'>
-						{word.word}
-					</Typography>
+					<Stack>
+						<Typography variant='h6'>
+							{word.word}
+						</Typography>
+						<Typography variant='body1' sx={{ paddingLeft: 2, paddingTop: 1 }}>
+							{translationsInLine(word.translations)}
+						</Typography>
+					</Stack>
 					<Stack direction='row' gap={2}>
-						<Button variant='contained' onClick={() => handleEditButtonClick(word.id)}>
-							<EditIcon />
-						</Button>
-						<Button variant='contained' onClick={() => handleDeleteButtonClick(word.id)}>
-							<DeleteIcon />
-						</Button>
+						<WordCircularProgress progress={word.progress} />
+						<Stack gap={2}>
+							<Button variant='contained' onClick={() => handleEditButtonClick(word.id)}>
+								<EditIcon />
+							</Button>
+							<Button variant='contained' onClick={() => handleDeleteButtonClick(word.id)}>
+								<DeleteIcon />
+							</Button>
+						</Stack>
 					</Stack>
 				</Stack>
-
-				<Typography variant='body1' sx={{ paddingLeft: 2, paddingTop: 1 }}>
-					{translationsInLine(word.translations)}
-				</Typography>
 			</Paper>
 		));
 	}
@@ -111,15 +117,21 @@ const WordList = ({ words, setWords, dict }: WordListProps) => {
 					<AddIcon />
 				</Button>
 			</Stack>
-			<Stack sx={{ gap: 2 }}>
-				{
-					(words.length === 0) ?
-						<Typography textAlign='center' variant='h6' paddingBottom={2}>
-							<FormattedMessage id='wordlist.no_words' />
-						</Typography>
-						: renderWords()
-				}
-			</Stack>
+			{
+				loading ?
+					<Typography variant='h5'>
+						<FormattedMessage id='loading' />
+					</Typography>
+					: <Stack sx={{ gap: 2 }}>
+						{
+							(words.length === 0) ?
+								<Typography textAlign='center' variant='h6' paddingBottom={2}>
+									<FormattedMessage id='wordlist.no_words' />
+								</Typography>
+								: renderWords()
+						}
+					</Stack>
+			}
 
 			<Dialog
 				open={open}

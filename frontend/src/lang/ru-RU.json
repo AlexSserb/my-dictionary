@@ -6,8 +6,14 @@
     "logout_btn": "Выйти",
     "settings": "Настройки",
 
+    "loading": "Загрузка...",
+
     "sidebar.dict_title": "Словарь",
     "sidebar.dict_edit_button": "Редактировать словари",
+
+    "train_sidebar.train_menu_title": "Тренировки",
+    "train_sidebar.btn.write_word_for_translation": "Написание слова для перевода",
+    "train_sidebar.no_words_error": "Тренировка недоступна для пустого словаря",
 
     "modal_dicts.title": "Редактирование списка словарей",
     "modal_dicts.create_dictionary_btn": "Создать словарь",
@@ -34,5 +40,18 @@
     "wordpage.modal_delete_word.title": "Подтверждение удаления слова",
     "wordpage.modal_delete_word.body": "Вы уверены, что хотите удалить слово?",
     "wordpage.modal_delete_word.yes": "Да",
-    "wordpage.modal_delete_word.no": "Нет"
+    "wordpage.modal_delete_word.no": "Нет",
+
+    "train_word_by_translation.title": "Тренировка",
+    "train_word_by_translation.tranlsations_label": "Перевод:",
+    "train_word_by_translation.word_label": "Введите слово для данного перевода:",
+    "train_word_by_translation.btn_submit": "Подтвердить",
+    "train_word_by_translation.btn_finish_training": "Завершить тренировку",
+    "train_word_by_translation.error_wrong_word": "Неверное слово",
+
+    "train_results.title": "Результаты тренировки",
+    "train_results.list_title": "Пройденные слова",
+    "train_results.table_header_word": "Слово",
+    "train_results.table_header_points": "Очки",
+    "train_results.btn_submit": "Ладушки"
 }

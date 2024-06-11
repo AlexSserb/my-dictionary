@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import (
-    String, DateTime, select, ForeignKey, update, delete
+    String, DateTime, Integer, select, ForeignKey, update, delete, orm
 )
 from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.sql import func
@@ -15,7 +15,7 @@ from datetime import datetime
 import os
 import uuid
 
-from .schemes import WordTranslationSchema, WordSchema, LanguageSchema
+from .schemes import WordTranslationSchema, WordSchema, LanguageSchema, ListOfTrainingResultSchema
 
 db = SQLAlchemy()
 
@@ -115,11 +115,18 @@ class Word(db.Model):
 
     id: Mapped[uuid.UUID] = mapped_column(default=uuid.uuid4, primary_key=True)
     word: Mapped[str] = mapped_column(String(128), index=True, unique=True)
+    progress: Mapped[int] = mapped_column(Integer(), default=0, server_default='0')
 
     dictionary_id: Mapped[uuid.UUID] = mapped_column(ForeignKey(Dictionary.id))
     dictionary: Mapped[Dictionary] = relationship('Dictionary', back_populates='words')
 
     translations: Mapped[List['WordTranslation']] = relationship(back_populates='word', cascade='all,delete')
+
+    @orm.validates('progress')
+    def validate_progress(self, key, value):
+        if not 0 <= value <= 100:
+            raise ValueError(f'Invalid progress: {value}')
+        return value
 
     @staticmethod
     def get_for_dictionary(dictionary: Dictionary) -> List:
@@ -134,13 +141,16 @@ class Word(db.Model):
             id=self.id,
             word=self.word,
             translations=[translation.to_schema() for translation in self.translations],
-            dictionary_id=self.dictionary_id
+            dictionary_id=self.dictionary_id,
+            progress=self.progress
         )
 
     @staticmethod
     def get_by_id(id):
         query = select(Word).where(Word.id == id)
-        return db.session.execute(query).one_or_none()
+        res = db.session.execute(query).one_or_none()
+        if res:
+            return res[0]
 
     def create(word_data: WordSchema):
         try:
@@ -161,7 +171,7 @@ class Word(db.Model):
         try:
             query_update_word = update(Word) \
                 .where(Word.id == word_data.id) \
-                .values(word = word_data.word)
+                .values(word = word_data.word, progress = word_data.progress)
             db.session.execute(query_update_word)
 
             query_delete_translations = delete(WordTranslation) \
@@ -176,6 +186,19 @@ class Word(db.Model):
 
         except Exception as ex:
             db.session.rollback()
+            raise ex
+
+    @staticmethod
+    def apply_training_results(data: ListOfTrainingResultSchema):
+        try: 
+            for result in data.training_results:
+                word = Word.get_by_id(result.word_id)
+                word.progress = min(result.points + word.progress, 100)
+                db.session.add(word)
+            db.session.commit()
+        except Exception as ex:
+            db.session.rollback()
+            print(ex)
             raise ex
 
 

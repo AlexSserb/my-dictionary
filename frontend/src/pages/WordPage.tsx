@@ -9,7 +9,7 @@ import {
 import ClearIcon from '@mui/icons-material/Clear';
 
 import AuthContext from '../context/AuthContext';
-import { NewWordType, WordType } from '../types/WordType';
+import { WordType } from '../types/WordType';
 import translationService from '../services/TranslationService';
 import Dictionary from '../types/DictionaryType';
 import WordTranslationType from '../types/WordTranslationType';
@@ -24,7 +24,7 @@ const WordPage = () => {
 	const dict: Dictionary = state.dict;
 
 	const { authTokens } = useContext(AuthContext);
-	const [word, setWord] = useState<WordType>({ id: uuidv4(), word: '', translations: [], dictionaryId: dict.id });
+	const [word, setWord] = useState<WordType>({ id: uuidv4(), word: '', translations: [], dictionaryId: dict.id, progress: 0 });
 	const [message, setMessage] = useState('');
 	const [curTrans, setCurTrans] = useState<WordTranslationType>({ id: uuidv4(), translation: "" });
 

@@ -9,7 +9,7 @@ from datetime import datetime
 from .database import db, User
 
 
-def create_app(config_name='app.config.Config'):
+def create_app(config_name="app.config.Config"):
     app = Flask(__name__)
     app.config.from_object(config_name)
     cors = CORS(app)
@@ -25,7 +25,7 @@ def create_app(config_name='app.config.Config'):
         words_bp,
         translations_bp,
     )
-    
+
     app.register_blueprint(accounts_bp)
     app.register_blueprint(dictionaries_bp)
     app.register_blueprint(languages_bp)

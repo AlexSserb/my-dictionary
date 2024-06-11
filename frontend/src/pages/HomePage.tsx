@@ -1,10 +1,10 @@
 import { useState, useEffect, useContext } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { UUID } from 'crypto';
 import {
   Grid, Stack, MenuItem, Select,
-  Paper, Typography,
+  Paper, Typography, Button,
 } from '@mui/material';
 
 import dictionaryService from '../services/DictionaryService';
@@ -19,21 +19,27 @@ import { WordType } from '../types/WordType';
 const HomePage = () => {
   const { authTokens } = useContext(AuthContext);
   const { state } = useLocation();
+  const intl = useIntl();
 
   const [dicts, setDicts] = useState<Array<Dictionary>>([]);
   const [currentDictId, setCurrentDictId] = useState<UUID | null>(state?.dictId ? state.dictId : null);
   const [words, setWords] = useState<Array<WordType>>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const getWords = (dictId: UUID) => {
-		wordService.getWords(dictId)
-			.then(res => {
-				setWords(res.data?.words);
-			})
-			.catch(err => {
-				console.log(err);
-			});
-	}
+    setLoading(true);
+    wordService.getWords(dictId)
+      .then(res => {
+        setWords(res.data?.words);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      .finally(() =>
+        setLoading(false)
+      );
+  }
 
   const setCurrentDict = (dictId: UUID) => {
     setCurrentDictId(dictId);
@@ -55,9 +61,9 @@ const HomePage = () => {
 
   useEffect(() => {
     if (!authTokens || !authTokens.accessToken) {
-			navigate("/login");
-			return;
-		}
+      navigate("/login");
+      return;
+    }
 
     getDictionaries();
   }, [])
@@ -66,8 +72,17 @@ const HomePage = () => {
     setCurrentDict(e.target.value);
   }
 
+  const handleStartTrain = () => {
+    if (words?.length === 0) {
+      alert(intl.formatMessage({ id: 'train_sidebar.no_words_error' }));
+    }
+    else {
+      navigate('/train-words-by-tranlsation', { state: { words: words } });
+    }
+  }
+
   return (
-    <Grid container sx={{ padding: 2, gap: 2 }}>
+    <Grid container sx={{ padding: 2, gap: '1%' }}>
       <Stack sx={{
         width: '23%',
         height: '100%',
@@ -93,7 +108,35 @@ const HomePage = () => {
         </Paper>
         <ModalEditDictionaries dicts={dicts} setDicts={setDicts} currentDictId={currentDictId} setCurrentDict={setCurrentDict} />
       </Stack>
-      <WordList words={words} setWords={setWords} dict={dicts.find(dict => dict.id === currentDictId)} />
+
+      <WordList words={words} setWords={setWords} dict={dicts.find(dict => dict.id === currentDictId)} loading={loading} />
+
+      <Stack sx={{
+        width: '19%',
+        height: '100%',
+        bgcolor: 'secondary.main',
+        paddingX: 3,
+        paddingY: 2,
+        borderRadius: 2,
+        gap: 1,
+        justifyContent: 'space-between',
+      }}>
+        {
+          loading ?
+            <Typography variant='h6'>
+              <FormattedMessage id='loading' />
+            </Typography>
+            : <>
+              <Typography variant='h6'>
+                <FormattedMessage id='train_sidebar.train_menu_title' />
+              </Typography>
+              <Button variant='contained' sx={{ textTransform: 'none' }}
+                onClick={() => handleStartTrain()}>
+                <FormattedMessage id='train_sidebar.btn.write_word_for_translation' />
+              </Button>
+            </>
+        }
+      </Stack>
     </Grid>
   )
 }

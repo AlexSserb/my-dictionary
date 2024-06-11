@@ -6,9 +6,7 @@ from uuid import UUID
 
 class CommonModel(BaseModel):
     model_config = ConfigDict(
-        alias_generator=to_camel,
-        populate_by_name=True,
-        from_attributes=True
+        alias_generator=to_camel, populate_by_name=True, from_attributes=True
     )
 
 
@@ -37,9 +35,10 @@ class LanguageSchema(CommonModel):
     name: str
     code: str
 
+
 class ListOfLanguagesSchema(CommonModel):
     languages: list[LanguageSchema]
-    
+
 
 class DictionarySchema(CommonModel):
     id: UUID
@@ -55,10 +54,10 @@ class CreateDictionarySchema(CommonModel):
     learned_language_id: UUID
     target_language_id: UUID
 
-    @model_validator(mode='after')
+    @model_validator(mode="after")
     def validate_fields(self) -> Self:
         if self.learned_language_id == self.target_language_id:
-            raise ValueError('Languages must be different')
+            raise ValueError("Languages must be different")
         return self
 
 
@@ -72,22 +71,35 @@ class WordSchema(CommonModel):
     word: str
     translations: list[WordTranslationSchema]
     dictionary_id: UUID
+    progress: int = 0
 
 
 class ListOfWordsSchema(CommonModel):
     words: list[WordSchema]
-    
+
 
 class TranslateSchema(CommonModel):
     """
     Schema for body validation for translation requests
     """
+
     language_from: LanguageSchema
     language_to: LanguageSchema
     text: str
+
 
 class TranslationGoogleResult(CommonModel):
     """
     Schema for google translation response
     """
+
     translations: list[WordTranslationSchema] | None
+
+
+class TrainingResultSchema(CommonModel):
+    word_id: UUID
+    points: int
+
+
+class ListOfTrainingResultSchema(CommonModel):
+    training_results: list[TrainingResultSchema]

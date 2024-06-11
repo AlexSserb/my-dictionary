@@ -1,6 +1,6 @@
 import { UUID } from 'crypto';
 import axiosConfig from '../axiosConfig';
-import { WordType } from '../types/WordType';
+import { WordTrainResultType, WordType } from '../types/WordType';
 
 const API_URL = 'words/';
 
@@ -15,6 +15,10 @@ class WordService {
 
 	deleteWord(wordId: string) {
 		return axiosConfig.delete(API_URL + wordId);
+	}
+
+	applyTrainingResults(results: WordTrainResultType[]) {
+		return axiosConfig.post(API_URL + 'apply-training-results', { trainingResults: results});
 	}
 }
 

@@ -7,17 +7,17 @@ from .. import BaseTestCase
 
 
 class TestDictionaryModel(BaseTestCase):
-    '''
+    """
     Tests for Dictionary model
-    '''
-    
+    """
+
     def setUp(self):
-        self.user = User(username='Alex')
-        self.user.set_password('password')
+        self.user = User(username="Alex")
+        self.user.set_password("password")
         db.session.add(self.user)
 
-        self.english_lang = Language(name='English', code='en')
-        self.spanish_lang = Language(name='Spanish', code='es')
+        self.english_lang = Language(name="English", code="en")
+        self.spanish_lang = Language(name="Spanish", code="es")
         db.session.add_all((self.english_lang, self.spanish_lang))
         db.session.commit()
 
@@ -26,12 +26,20 @@ class TestDictionaryModel(BaseTestCase):
         db.drop_all()
 
     def test_get_dictionaries_for_user(self):
-        dictionary1 = Dictionary(user_id=self.user.id, learned_language=self.english_lang, target_language=self.spanish_lang)
+        dictionary1 = Dictionary(
+            user_id=self.user.id,
+            learned_language=self.english_lang,
+            target_language=self.spanish_lang,
+        )
         db.session.add(dictionary1)
 
         dictionaries_set_1 = Dictionary.get_for_user(self.user)
 
-        dictionary2 = Dictionary(user_id=self.user.id, learned_language=self.spanish_lang, target_language=self.english_lang)
+        dictionary2 = Dictionary(
+            user_id=self.user.id,
+            learned_language=self.spanish_lang,
+            target_language=self.english_lang,
+        )
         db.session.add(dictionary2)
 
         dictionaries_set_2 = Dictionary.get_for_user(self.user)
@@ -40,6 +48,5 @@ class TestDictionaryModel(BaseTestCase):
         self.assertEqual(set(dictionaries_set_2), set((dictionary1, dictionary2)))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
-    

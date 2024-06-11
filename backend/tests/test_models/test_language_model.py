@@ -7,13 +7,13 @@ from .. import BaseTestCase
 
 
 class TestLanguageModel(BaseTestCase):
-    '''
+    """
     Tests for Language model
-    '''
-    
+    """
+
     def setUp(self):
-        self.user = User(username='Alex')
-        self.user.set_password('password')
+        self.user = User(username="Alex")
+        self.user.set_password("password")
         db.session.add(self.user)
         db.session.commit()
 
@@ -22,19 +22,23 @@ class TestLanguageModel(BaseTestCase):
         db.drop_all()
 
     def test_get_all_languages(self):
-        self.english_lang = Language(name='English', code='en')
-        self.spanish_lang = Language(name='Spanish', code='es')
+        self.english_lang = Language(name="English", code="en")
+        self.spanish_lang = Language(name="Spanish", code="es")
         db.session.add_all((self.english_lang, self.spanish_lang))
         db.session.commit()
 
         languages = Language.get_all()
 
-        self.assertEqual(set(languages), set((
-            self.english_lang,
-            self.spanish_lang,
-        )))
+        self.assertEqual(
+            set(languages),
+            set(
+                (
+                    self.english_lang,
+                    self.spanish_lang,
+                )
+            ),
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
-    

@@ -12,10 +12,12 @@ import RegistrationPage from './pages/RegistrationPage';
 import ApplicationBar from './compontents/AppBar';
 import SettingsPage from './pages/SettingsPage';
 import WordPage from './pages/WordPage';
+import TrainWordsPage from './pages/TrainWordsPage';
 import theme from './theme';
 
 import { LOCALES } from './i18n/locales';
 import { messages } from './i18n/messages';
+import TrainResultsPage from './pages/TrainResultsPage';
 
 function App() {
   const [currentLocale, setCurrentLocale] = useState(localStorage.getItem('locale') || LOCALES.ENGLISH);
@@ -43,6 +45,8 @@ function App() {
                 <Route path='/login' element={<LoginPage />} />
                 <Route path='/settings' element={<SettingsPage currentLocale={currentLocale} handleLangChange={handleLangChange} />} />
                 <Route path='/word' element={<WordPage />} />
+                <Route path='/train-words-by-tranlsation' element={<TrainWordsPage />} />
+                <Route path='/train-results' element={<TrainResultsPage />} />
               </Routes>
             </AuthProvider>
           </BrowserRouter>
