@@ -13,6 +13,7 @@
 
     "train_sidebar.train_menu_title": "Тренировки",
     "train_sidebar.btn.write_word_for_translation": "Написание слова для перевода",
+    "train_sidebar.btn.matching_words_and_translations": "Сопоставление слов и переводов",
     "train_sidebar.no_words_error": "Тренировка недоступна для пустого словаря",
 
     "modal_dicts.title": "Редактирование списка словарей",
@@ -26,6 +27,8 @@
     "wordlist.title": "Ваши слова",
     "wordlist.add_new_word": "Новое слово",
     "wordlist.no_words": "В словаре нет слов. Добавьте первое слово!",
+    "wordlist.show_studied_words": "Показать выученные слова",
+    "wordlist.hide_studied_words": "Скрыть выученные слова",
 
     "wordpage.word_field_label": "Слово",
     "wordpage.title_add": "Добавление нового слова",
@@ -48,6 +51,8 @@
     "train_word_by_translation.btn_submit": "Подтвердить",
     "train_word_by_translation.btn_finish_training": "Завершить тренировку",
     "train_word_by_translation.error_wrong_word": "Неверное слово",
+
+    "train_word_matching.incorrect_answer": "Неверный ответ",
 
     "train_results.title": "Результаты тренировки",
     "train_results.list_title": "Пройденные слова",

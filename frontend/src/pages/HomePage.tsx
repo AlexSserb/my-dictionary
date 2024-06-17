@@ -23,7 +23,8 @@ const HomePage = () => {
 
   const [dicts, setDicts] = useState<Array<Dictionary>>([]);
   const [currentDictId, setCurrentDictId] = useState<UUID | null>(state?.dictId ? state.dictId : null);
-  const [words, setWords] = useState<Array<WordType>>([]);
+  const [studiedWords, setStudiedWords] = useState<Array<WordType>>([]);
+  const [wordsToStudy, setWordsToStudy] = useState<Array<WordType>>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -31,7 +32,8 @@ const HomePage = () => {
     setLoading(true);
     wordService.getWords(dictId)
       .then(res => {
-        setWords(res.data?.words);
+        setWordsToStudy(res.data?.words.filter((word: WordType) => word.progress !== 100));
+        setStudiedWords(res.data?.words.filter((word: WordType) => word.progress === 100));
       })
       .catch(err => {
         console.log(err);
@@ -39,12 +41,12 @@ const HomePage = () => {
       .finally(() =>
         setLoading(false)
       );
-  }
+  };
 
   const setCurrentDict = (dictId: UUID) => {
     setCurrentDictId(dictId);
     getWords(dictId);
-  }
+  };
 
   const getDictionaries = () => {
     dictionaryService.getDictionaries()
@@ -57,7 +59,7 @@ const HomePage = () => {
       .catch(err => {
         console.log(err);
       });
-  }
+  };
 
   useEffect(() => {
     if (!authTokens || !authTokens.accessToken) {
@@ -66,20 +68,20 @@ const HomePage = () => {
     }
 
     getDictionaries();
-  }, [])
+  }, []);
 
   const handleDictChange = (e: any) => {
     setCurrentDict(e.target.value);
-  }
+  };
 
-  const handleStartTrain = () => {
-    if (words?.length === 0) {
+  const handleStartTrain = (path: string) => {
+    if (wordsToStudy?.length === 0) {
       alert(intl.formatMessage({ id: 'train_sidebar.no_words_error' }));
     }
     else {
-      navigate('/train-words-by-tranlsation', { state: { words: words } });
+      navigate(path, { state: { words: wordsToStudy } });
     }
-  }
+  };
 
   return (
     <Grid container sx={{ padding: 2, gap: '1%' }}>
@@ -109,7 +111,9 @@ const HomePage = () => {
         <ModalEditDictionaries dicts={dicts} setDicts={setDicts} currentDictId={currentDictId} setCurrentDict={setCurrentDict} />
       </Stack>
 
-      <WordList words={words} setWords={setWords} dict={dicts.find(dict => dict.id === currentDictId)} loading={loading} />
+      <WordList studiedWords={studiedWords} setStudiedWords={setStudiedWords}
+        wordsToStudy={wordsToStudy} setWordsToStudy={setWordsToStudy}
+        dict={dicts.find(dict => dict.id === currentDictId)} loading={loading} />
 
       <Stack sx={{
         width: '19%',
@@ -131,14 +135,18 @@ const HomePage = () => {
                 <FormattedMessage id='train_sidebar.train_menu_title' />
               </Typography>
               <Button variant='contained' sx={{ textTransform: 'none' }}
-                onClick={() => handleStartTrain()}>
+                onClick={() => handleStartTrain('/train-words-by-tranlsation')}>
                 <FormattedMessage id='train_sidebar.btn.write_word_for_translation' />
+              </Button>
+              <Button variant='contained' sx={{ textTransform: 'none' }}
+                onClick={() => handleStartTrain('/train-matching-words')}>
+                <FormattedMessage id='train_sidebar.btn.matching_words_and_translations' />
               </Button>
             </>
         }
       </Stack>
     </Grid>
-  )
-}
+  );
+};
 
 export default HomePage;

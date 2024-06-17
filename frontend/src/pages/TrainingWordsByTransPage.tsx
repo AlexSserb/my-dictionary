@@ -3,7 +3,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
 	Grid, Stack, TextField, Button, Alert,
-	Box, Typography, 
+	Box, Typography,
 } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
@@ -13,7 +13,7 @@ import { WordWithPointsType } from '../types/WordType';
 import randomInteger from '../utils/randomInteger';
 
 
-const TrainWordsPage = () => {
+const TrainingWordsByTransPage = () => {
 	const intl = useIntl();
 	const navigate = useNavigate();
 	const { state } = useLocation();
@@ -22,9 +22,9 @@ const TrainWordsPage = () => {
 	const MIN_POINTS = 2;
 
 	const { authTokens } = useContext(AuthContext);
-	const [word, setWord] = useState<WordWithPointsType>({ 
-		...state.words[randomInteger(0, state.words.length - 1)], 
-		points: DEFAULT_POINTS 
+	const [word, setWord] = useState<WordWithPointsType>({
+		...state.words[randomInteger(0, state.words.length - 1)],
+		points: DEFAULT_POINTS
 	});
 	const [userWord, setUserWord] = useState<string>('');
 	const [message, setMessage] = useState('');
@@ -34,7 +34,7 @@ const TrainWordsPage = () => {
 			navigate("/login");
 			return;
 		}
-	}, [])
+	}, []);
 
 	const checkWordAndGoNext = () => {
 		setMessage('');
@@ -43,7 +43,7 @@ const TrainWordsPage = () => {
 			state.words = state.words.filter((item: WordWithPointsType) => item.id !== word.id);
 
 			if (state.words.length === 0) {
-				navigate('/train-results', { state: { passedWords: [...passedWords, word] }});
+				navigate('/train-results', { state: { passedWords: [...passedWords, word] } });
 			}
 
 			setPassedWords([...passedWords, word]);
@@ -57,7 +57,7 @@ const TrainWordsPage = () => {
 				word.points--;
 			}
 		}
-	}
+	};
 
 	const takeHint = () => {
 		if (word.word === userWord) return;
@@ -73,11 +73,11 @@ const TrainWordsPage = () => {
 		else {
 			setUserWord(userWord.substring(0, i) + word.word[i]);
 		}
-		
+
 		if (word.points > MIN_POINTS) {
 			word.points--;
 		}
-	}
+	};
 
 	const fieldBoxStyle = {
 		borderColor: 'info',
@@ -138,11 +138,11 @@ const TrainWordsPage = () => {
 								/>
 							</Box>
 							<Button variant='contained' sx={{ marginY: 1 }} onClick={() => setUserWord('')}>
-                                <ClearIcon />
-                            </Button>
+								<ClearIcon />
+							</Button>
 							<Button variant='contained' sx={{ marginY: 1 }} onClick={() => takeHint()}>
-                                <LightbulbIcon />
-                            </Button>
+								<LightbulbIcon />
+							</Button>
 						</Stack>
 					</Stack>
 
@@ -154,13 +154,13 @@ const TrainWordsPage = () => {
 					<Button variant='contained' onClick={() => checkWordAndGoNext()}>
 						<FormattedMessage id='train_word_by_translation.btn_submit' />
 					</Button>
-					<Button variant='contained' onClick={() => navigate('/train-results', { state: { passedWords: passedWords }})}>
+					<Button variant='contained' onClick={() => navigate('/train-results', { state: { passedWords: passedWords } })}>
 						<FormattedMessage id='train_word_by_translation.btn_finish_training' />
 					</Button>
 				</Box>
 			</Stack>
 		</Grid>
-	)
-}
+	);
+};
 
-export default TrainWordsPage;
+export default TrainingWordsByTransPage;

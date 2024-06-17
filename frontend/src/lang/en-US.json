@@ -13,6 +13,7 @@
 
     "train_sidebar.train_menu_title": "Trainings",
     "train_sidebar.btn.write_word_for_translation": "Write word for translation",
+    "train_sidebar.btn.matching_words_and_translations": "Matching words and translations",
     "train_sidebar.no_words_error": "Training is not available for empty dictionary",
 
     "modal_dicts.title": "List of dictionaries editing",
@@ -26,6 +27,8 @@
     "wordlist.title": "Your words",
     "wordlist.add_new_word": "Add new word",
     "wordlist.no_words": "There are no words in the dictionary. Add the first one!",
+    "wordlist.show_studied_words": "Show studied words",
+    "wordlist.hide_studied_words": "Hide studied words",
 
     "wordpage.word_field_label": "Word",
     "wordpage.title_add": "Adding a new word",
@@ -44,10 +47,12 @@
 
     "train_word_by_translation.title": "Training",
     "train_word_by_translation.tranlsations_label": "Translations:",
-    "train_word_by_translation.word_label": "Enter a word for this tranlsations:",
+    "train_word_by_translation.word_label": "Enter a word for these tranlsations:",
     "train_word_by_translation.btn_submit": "Submit",
     "train_word_by_translation.btn_finish_training": "Finish training",
     "train_word_by_translation.error_wrong_word": "Wrong word",
+
+    "train_word_matching.incorrect_answer": "Incorrect answer",
 
     "train_results.title": "Training results",
     "train_results.list_title": "Passed words",

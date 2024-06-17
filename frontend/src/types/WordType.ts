@@ -5,14 +5,22 @@ export interface WordType {
     word: string,
     translations: WordTranslationType[],
     dictionaryId: string,
-    progress: number
+    progress: number;
 }
 
 export interface WordWithPointsType extends WordType {
-    points: number
+    points: number,
+    isFinished: boolean;
 }
 
 export interface WordTrainResultType {
-    word_id: string,
-    points: number
+    wordId: string,
+    points: number,
+    isActive: boolean | undefined;
+}
+
+export interface WordIdWithTranslationType {
+    wordId: string,
+    translations: string,
+    isFinished: boolean;
 }

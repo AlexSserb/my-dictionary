@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   AppBar,
@@ -26,7 +26,7 @@ function ApplicationBar() {
   const navigate = useNavigate();
 
   const pages: Array<Array<string>> = [
-    ['Todo', '/todo']
+
   ];
 
   const handleOpenNavMenu = (event: any) => {

@@ -1,5 +1,5 @@
 import { useEffect, useContext } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
 	Grid, Stack, Button,
@@ -13,7 +13,6 @@ import wordService from '../services/WordService';
 
 
 const TrainResultsPage = () => {
-	const intl = useIntl();
 	const navigate = useNavigate();
 	const { state } = useLocation();
 	const passedWords: WordWithPointsType[] = state.passedWords;
@@ -30,7 +29,7 @@ const TrainResultsPage = () => {
 		wordService.applyTrainingResults(results)
 			.then(res => console.log(res))
 			.catch(err => console.log(err));
-	}, [])
+	}, []);
 
 	return (
 		<Grid container sx={{ padding: 2, gap: 2, justifyContent: 'center' }}>
@@ -82,7 +81,7 @@ const TrainResultsPage = () => {
 				</Box>
 			</Stack>
 		</Grid>
-	)
-}
+	);
+};
 
 export default TrainResultsPage;

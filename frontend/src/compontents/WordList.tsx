@@ -6,27 +6,27 @@ import {
 	Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 
 import { WordType } from '../types/WordType';
-import WordTranslationType from '../types/WordTranslationType';
 import Dictionary from '../types/DictionaryType';
 import wordService from '../services/WordService';
-import WordCircularProgress from './WordCircularProgress';
+import WordItem from './WordItem';
 
 
 type WordListProps = {
-	words: WordType[];
-	setWords: React.Dispatch<React.SetStateAction<WordType[]>>;
+	studiedWords: WordType[];
+	setStudiedWords: React.Dispatch<React.SetStateAction<WordType[]>>;
+	wordsToStudy: WordType[];
+	setWordsToStudy: React.Dispatch<React.SetStateAction<WordType[]>>;
 	dict: Dictionary | undefined;
 	loading: boolean;
 }
 
-const WordList = ({ words, setWords, dict, loading }: WordListProps) => {
+const WordList = ({ studiedWords, setStudiedWords, wordsToStudy, setWordsToStudy, dict, loading }: WordListProps) => {
 	const [open, setOpen] = useState(false);
 	const [curWordId, setCurWordId] = useState('');
 	const navigate = useNavigate();
+	const [showStudied, setShowStudied] = useState(false);
 
 	const handleOpen = () => {
 		setOpen(true);
@@ -35,14 +35,6 @@ const WordList = ({ words, setWords, dict, loading }: WordListProps) => {
 	const handleClose = () => {
 		setOpen(false);
 	};
-
-	useEffect(() => {
-
-	}, [])
-
-	const translationsInLine = (translations: WordTranslationType[]) => {
-		return translations.map(translation => translation.translation).join(', ');
-	}
 
 	const handleDeleteButtonClick = (wordId: string) => {
 		setCurWordId(wordId);
@@ -53,7 +45,8 @@ const WordList = ({ words, setWords, dict, loading }: WordListProps) => {
 		handleClose();
 		wordService.deleteWord(curWordId)
 			.then(_ => {
-				setWords(words.filter(word => word.id !== curWordId));
+				setStudiedWords(studiedWords.filter(word => word.id !== curWordId));
+				setWordsToStudy(wordsToStudy.filter(word => word.id !== curWordId));
 			})
 			.catch(err => {
 				console.log(err);
@@ -63,40 +56,22 @@ const WordList = ({ words, setWords, dict, loading }: WordListProps) => {
 	}
 
 	const handleEditButtonClick = (wordId: string) => {
-		navigate('/word', { state: { dict: dict, words: words, word: words.find(word => word.id === wordId) } })
+		const words = [...studiedWords, ...wordsToStudy];
+		navigate('/word', {
+			state: {
+				dict: dict,
+				words: words,
+				word: words.find(word => word.id === wordId)
+			}
+		});
 	}
 
-	const renderWords = () => {
-		return words.map(word => (
-			<Paper sx={{
-				bgcolor: 'primary.main',
-				textAlign: 'left',
-				paddingY: 2,
-				paddingX: 3
-			}}>
-				<Stack justifyContent='space-between' direction='row'>
-					<Stack>
-						<Typography variant='h6'>
-							{word.word}
-						</Typography>
-						<Typography variant='body1' sx={{ paddingLeft: 2, paddingTop: 1 }}>
-							{translationsInLine(word.translations)}
-						</Typography>
-					</Stack>
-					<Stack direction='row' gap={2}>
-						<WordCircularProgress progress={word.progress} />
-						<Stack gap={2}>
-							<Button variant='contained' onClick={() => handleEditButtonClick(word.id)}>
-								<EditIcon />
-							</Button>
-							<Button variant='contained' onClick={() => handleDeleteButtonClick(word.id)}>
-								<DeleteIcon />
-							</Button>
-						</Stack>
-					</Stack>
-				</Stack>
-			</Paper>
-		));
+	const renderWords = (wordsToRender: Array<WordType>) => {
+		return wordsToRender.map(word => <WordItem
+			word={word}
+			handleEditButtonClick={handleEditButtonClick}
+			handleDeleteButtonClick={handleDeleteButtonClick}
+		/>);
 	}
 
 	return (
@@ -113,7 +88,7 @@ const WordList = ({ words, setWords, dict, loading }: WordListProps) => {
 				<Typography variant='h5'>
 					<FormattedMessage id='wordlist.title' />
 				</Typography>
-				<Button variant='contained' onClick={() => navigate('/word', { state: { dict: dict, words: words } })}>
+				<Button variant='contained' onClick={() => navigate('/word', { state: { dict: dict, words: [...studiedWords, ...wordsToStudy] } })}>
 					<AddIcon />
 				</Button>
 			</Stack>
@@ -124,11 +99,22 @@ const WordList = ({ words, setWords, dict, loading }: WordListProps) => {
 					</Typography>
 					: <Stack sx={{ gap: 2 }}>
 						{
-							(words.length === 0) ?
+							(wordsToStudy.length === 0) ?
 								<Typography textAlign='center' variant='h6' paddingBottom={2}>
 									<FormattedMessage id='wordlist.no_words' />
 								</Typography>
-								: renderWords()
+								: renderWords(wordsToStudy)
+						}
+						{
+							(studiedWords.length > 0) && <>
+								<Button variant='contained' onClick={() => setShowStudied(!showStudied)}>
+									{
+										showStudied ? <FormattedMessage id='wordlist.hide_studied_words' />
+											: <FormattedMessage id='wordlist.show_studied_words' />
+									}
+								</Button>
+								{(showStudied) ? renderWords(studiedWords) : null}
+							</>
 						}
 					</Stack>
 			}
