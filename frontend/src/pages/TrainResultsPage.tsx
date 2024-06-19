@@ -10,6 +10,7 @@ import {
 import AuthContext from '../context/AuthContext';
 import { WordTrainResultType, WordWithPointsType } from '../types/WordType';
 import wordService from '../services/WordService';
+import { stackContainerStyle } from './styles/StylesTrainResultsPage';
 
 
 const TrainResultsPage = () => {
@@ -33,15 +34,7 @@ const TrainResultsPage = () => {
 
 	return (
 		<Grid container sx={{ padding: 2, gap: 2, justifyContent: 'center' }}>
-			<Stack sx={{
-				width: '40%',
-				bgcolor: 'secondary.main',
-				paddingX: 6,
-				paddingY: 4,
-				borderRadius: 2,
-				gap: 1,
-				justifyContent: 'space-between',
-			}}>
+			<Stack sx={stackContainerStyle}>
 				<Typography variant='h5' paddingBottom={2}>
 					<FormattedMessage id='train_results.title' />
 				</Typography>

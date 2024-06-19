@@ -1,13 +1,14 @@
-import { FormEvent, useContext, useEffect } from 'react'
+import { FormEvent, useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Button, TextField, Typography, FormControl,
-  Grid, Paper, Alert, Box,
-  FormControlLabel
+  Grid, Paper, Alert, Box
 } from '@mui/material';
 
 import AuthContext from '../context/AuthContext';
 import RegistrationForm from '../types/RegistrationFormType';
+import { fieldBoxStyle } from './styles/Styles';
+import { paperContainerStyle } from './styles/StylesRegistrationPage';
 
 
 const RegistrationPage = () => {
@@ -15,7 +16,7 @@ const RegistrationPage = () => {
 
   useEffect(() => {
     changeMessage('');
-  }, [])
+  }, []);
 
   const handleRegister = (e: FormEvent<RegistrationForm>) => {
     e.preventDefault();
@@ -32,44 +33,21 @@ const RegistrationPage = () => {
     else {
       registerUser(e);
     }
-  }
-
-  const fieldBoxStyle = {
-    borderColor: 'info',
-    borderWidth: '1px',
-    border: 'solid',
-    borderRadius: 2,
-    marginBottom: 2
   };
 
   return (
-    <Grid container sx={{
-      spacing: 0,
-      direction: 'column',
-      alignItems: 'center',
-      justifyContent: 'center'
-    }}>
-      <Paper elevation={5} sx={{
-        paddingX: 5,
-        paddingY: 3,
-        marginTop: 3,
-        backgroundColor: 'secondary.main',
-        display: 'table-column',
-        width: '35%',
-        minWidth: '500px',
-        textAlign: 'left',
-        borderRadius: 3,
-      }}>
+    <Grid container justifyContent='center'>
+      <Paper elevation={5} sx={paperContainerStyle}>
         <Typography textAlign={'center'} variant='h5' component='h5' sx={{ paddingBlockEnd: 3 }}>
           Registration
         </Typography>
-        <div className='m-4'>
+        <div>
           <form onSubmit={handleRegister}>
             <FormControl>
               <Typography>
                 Username
               </Typography>
-              <Box sx={fieldBoxStyle}>
+              <Box sx={fieldBoxStyle} marginBottom={2}>
                 <TextField
                   type='text'
                   name='username'
@@ -83,7 +61,7 @@ const RegistrationPage = () => {
               <Typography>
                 Password
               </Typography>
-              <Box sx={fieldBoxStyle}>
+              <Box sx={fieldBoxStyle} marginBottom={2}>
                 <TextField
                   type='password'
                   name='password'
@@ -97,7 +75,7 @@ const RegistrationPage = () => {
               <Typography>
                 Repeat password
               </Typography>
-              <Box sx={fieldBoxStyle}>
+              <Box sx={fieldBoxStyle} marginBottom={2}>
                 <TextField
                   type='password'
                   name='passwordRepeat'
@@ -124,8 +102,8 @@ const RegistrationPage = () => {
         </div>
       </Paper>
     </Grid>
-  )
-}
+  );
+};
 
 export default RegistrationPage;
 

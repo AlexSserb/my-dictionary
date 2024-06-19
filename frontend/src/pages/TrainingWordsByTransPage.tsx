@@ -2,8 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
-	Grid, Stack, TextField, Button, Alert,
-	Box, Typography,
+	Grid, Stack, TextField, Button, Alert, Box, Typography
 } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';

@@ -13,7 +13,7 @@ from flask_pydantic import validate
 
 
 from ..database import User, db
-from ..schemes import LoginSchema, RegisterSchema, ChangePasswordSchema, TokenPairSchema
+from ..schemes.schemes_accounts import LoginSchema, RegisterSchema, ChangePasswordSchema, TokenPairSchema
 
 bp = Blueprint("accounts", __name__, url_prefix="/accounts")
 

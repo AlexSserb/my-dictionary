@@ -14,6 +14,8 @@ import translationService from '../services/TranslationService';
 import Dictionary from '../types/DictionaryType';
 import WordTranslationType from '../types/WordTranslationType';
 import wordService from '../services/WordService';
+import { stackContainerStyle, translationCardStyle } from './styles/StylesWordPage';
+import { fieldBoxStyle } from './styles/Styles';
 
 
 const WordPage = () => {
@@ -35,9 +37,9 @@ const WordPage = () => {
 		}
 
 		if (state.word) {
-			setWord({ ...state.word,  });
+			setWord({ ...state.word, });
 		}
-	}, [])
+	}, []);
 
 	const translate = () => {
 		translationService.googleTranslate({
@@ -51,16 +53,16 @@ const WordPage = () => {
 			.catch(err => {
 				console.log(err);
 			});
-	}
+	};
 
 	const addTranslation = () => {
 		setWord({ ...word, translations: [...word.translations, curTrans] });
 		setCurTrans({ id: uuidv4(), translation: "" });
-	}
+	};
 
 	const removeTranslation = (translation: WordTranslationType) => {
 		setWord({ ...word, translations: word.translations.filter(t => t.id !== translation.id) });
-	}
+	};
 
 	const saveWord = () => {
 		setMessage('');
@@ -79,30 +81,15 @@ const WordPage = () => {
 					console.log(err);
 				});
 		}
-	}
-
-	const fieldBoxStyle = {
-		borderColor: 'info',
-		borderWidth: '1px',
-		border: 'solid',
-		borderRadius: 2
 	};
 
 	return (
 		<Grid container sx={{ padding: 2, gap: 2, justifyContent: 'center' }}>
-			<Stack sx={{
-				width: '50%',
-				bgcolor: 'secondary.main',
-				paddingX: 5,
-				paddingY: 4,
-				borderRadius: 2,
-				gap: 1,
-				justifyContent: 'space-between',
-			}}>
+			<Stack sx={stackContainerStyle}>
 				<Typography variant='h5' paddingBottom={2}>
 					{
 						state.word ? <FormattedMessage id='wordpage.title_edit' />
-                        : <FormattedMessage id='wordpage.title_add' />
+							: <FormattedMessage id='wordpage.title_add' />
 					}
 				</Typography>
 				<Box textAlign='left' display='grid' gap={2}>
@@ -155,15 +142,7 @@ const WordPage = () => {
 					<Grid container direction='row' wrap='wrap' gap={2} >
 						{
 							word.translations.map(item => (
-								<Stack direction='row' sx={{
-									borderRadius: 2,
-									gap: 1,
-									justifyContent: 'space-between',
-									alignItems: 'center',
-									padding: 1,
-									paddingLeft: 2,
-									bgcolor: 'primary.main',
-								}}>
+								<Stack direction='row' sx={translationCardStyle}>
 									<Typography>{item.translation}</Typography>
 									<Button variant='contained' onClick={() => removeTranslation(item)}>
 										<ClearIcon />
@@ -183,7 +162,7 @@ const WordPage = () => {
 				</Box>
 			</Stack>
 		</Grid>
-	)
-}
+	);
+};
 
 export default WordPage;

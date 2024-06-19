@@ -5,7 +5,7 @@ from uuid import UUID, uuid4
 from googletrans import Translator
 
 from ..database import User, Dictionary, Word, WordTranslation, Language, db
-from ..schemes import TranslateSchema, LanguageSchema, TranslationGoogleResult
+from ..schemes.schemes import TranslateSchema, LanguageSchema, TranslationGoogleResult
 
 bp = Blueprint("translations", __name__, url_prefix="/translations")
 

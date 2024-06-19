@@ -12,25 +12,16 @@ import Dictionary from '../types/DictionaryType';
 import dictionaryService from '../services/DictionaryService';
 import { UUID } from 'crypto';
 import { Delete } from '@mui/icons-material';
+import { modalStyle } from './styles/StylesModalEditDictionaries';
+import { modalTitleStyle } from './styles/Styles';
 
-const style = {
-	position: 'absolute',
-	top: '50%',
-	left: '50%',
-	transform: 'translate(-50%, -50%)',
-	width: '40%',
-	bgcolor: 'secondary.main',
-	borderRadius: '8px',
-	boxShadow: 24,
-	p: 4,
-};
 
 type ModalEditDictionariesProps = {
 	dicts: Array<Dictionary>;
 	setDicts: React.Dispatch<React.SetStateAction<Dictionary[]>>;
 	currentDictId: UUID | null;
 	setCurrentDict: (dictId: UUID) => void;
-}
+};
 
 const ModalEditDictionaries = ({ dicts, setDicts, currentDictId, setCurrentDict }: ModalEditDictionariesProps) => {
 	const [open, setOpen] = useState(false);
@@ -55,19 +46,19 @@ const ModalEditDictionaries = ({ dicts, setDicts, currentDictId, setCurrentDict 
 			.catch(err => {
 				console.log(err);
 			});
-	}
+	};
 
 	useEffect(() => {
 		getLanguages();
-	}, [])
+	}, []);
 
 	const handleFirstLangChange = (e: any) => {
 		setFirstLangId(e.target.value);
-	}
+	};
 
 	const handleSecondLangChange = (e: any) => {
 		setSecondLangId(e.target.value);
-	}
+	};
 
 	const createDictionary = () => {
 		setMessage('');
@@ -90,21 +81,21 @@ const ModalEditDictionaries = ({ dicts, setDicts, currentDictId, setCurrentDict 
 				console.log(err);
 				setMessage(`Error: ${err.response?.status}.`);
 			});
-	}
+	};
 
 	const deleteDictionary = (id: UUID) => {
 		dictionaryService.deleteDictionary(id)
-            .then(_ => {
-                const dictionaries = dicts.filter(d => d.id !== id);
+			.then(_ => {
+				const dictionaries = dicts.filter(d => d.id !== id);
 				if (currentDictId === id && dictionaries.length >= 0) {
 					setCurrentDict(dictionaries[0]?.id);
 				}
 				setDicts(dictionaries);
-            })
-            .catch(err => {
-                console.log(err);
-            });
-	}
+			})
+			.catch(err => {
+				console.log(err);
+			});
+	};
 
 	return (
 		<div>
@@ -115,11 +106,8 @@ const ModalEditDictionaries = ({ dicts, setDicts, currentDictId, setCurrentDict 
 				open={open}
 				onClose={handleClose}
 			>
-				<Box sx={style}>
-					<Typography variant='h5' component='h5' sx={{
-						textAlign: 'center',
-						marginBottom: 3
-					}}>
+				<Box sx={modalStyle}>
+					<Typography variant='h5' component='h5' sx={modalTitleStyle}>
 						<FormattedMessage id='modal_dicts.title' />
 					</Typography>
 
@@ -196,6 +184,6 @@ const ModalEditDictionaries = ({ dicts, setDicts, currentDictId, setCurrentDict 
 			</Modal>
 		</div >
 	);
-}
+};
 
 export default ModalEditDictionaries;

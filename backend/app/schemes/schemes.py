@@ -1,56 +1,31 @@
-from pydantic import BaseModel, ConfigDict, model_validator
-from pydantic.alias_generators import to_camel
+from pydantic import model_validator
 from typing_extensions import Self
 from uuid import UUID
 
-
-class CommonModel(BaseModel):
-    model_config = ConfigDict(
-        alias_generator=to_camel, populate_by_name=True, from_attributes=True
-    )
+from .common_schema import CommonSchema
 
 
-class LoginSchema(CommonModel):
-    username: str
-    password: str
-
-
-class RegisterSchema(CommonModel):
-    username: str
-    password: str
-
-
-class ChangePasswordSchema(CommonModel):
-    new_password: str
-    old_password: str
-
-
-class TokenPairSchema(CommonModel):
-    access_token: str
-    refresh_token: str
-
-
-class LanguageSchema(CommonModel):
+class LanguageSchema(CommonSchema):
     id: UUID
     name: str
     code: str
 
 
-class ListOfLanguagesSchema(CommonModel):
+class ListOfLanguagesSchema(CommonSchema):
     languages: list[LanguageSchema]
 
 
-class DictionarySchema(CommonModel):
+class DictionarySchema(CommonSchema):
     id: UUID
     learned_language: LanguageSchema
     target_language: LanguageSchema
 
 
-class ListOfDictionariesSchema(CommonModel):
+class ListOfDictionariesSchema(CommonSchema):
     dictionaries: list[DictionarySchema]
 
 
-class CreateDictionarySchema(CommonModel):
+class CreateDictionarySchema(CommonSchema):
     learned_language_id: UUID
     target_language_id: UUID
 
@@ -61,12 +36,12 @@ class CreateDictionarySchema(CommonModel):
         return self
 
 
-class WordTranslationSchema(CommonModel):
+class WordTranslationSchema(CommonSchema):
     id: UUID
     translation: str
 
 
-class WordSchema(CommonModel):
+class WordSchema(CommonSchema):
     id: UUID
     word: str
     translations: list[WordTranslationSchema]
@@ -74,11 +49,11 @@ class WordSchema(CommonModel):
     progress: int = 0
 
 
-class ListOfWordsSchema(CommonModel):
+class ListOfWordsSchema(CommonSchema):
     words: list[WordSchema]
 
 
-class TranslateSchema(CommonModel):
+class TranslateSchema(CommonSchema):
     """
     Schema for body validation for translation requests
     """
@@ -88,7 +63,7 @@ class TranslateSchema(CommonModel):
     text: str
 
 
-class TranslationGoogleResult(CommonModel):
+class TranslationGoogleResult(CommonSchema):
     """
     Schema for google translation response
     """
@@ -96,10 +71,10 @@ class TranslationGoogleResult(CommonModel):
     translations: list[WordTranslationSchema] | None
 
 
-class TrainingResultSchema(CommonModel):
+class TrainingResultSchema(CommonSchema):
     word_id: UUID
     points: int
 
 
-class ListOfTrainingResultSchema(CommonModel):
+class ListOfTrainingResultSchema(CommonSchema):
     training_results: list[TrainingResultSchema]

@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from ..database import Language
-from ..schemes import ListOfLanguagesSchema, LanguageSchema
+from ..schemes.schemes import ListOfLanguagesSchema, LanguageSchema
 
 bp = Blueprint("languages", __name__, url_prefix="/languages")
 

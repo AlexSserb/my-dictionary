@@ -4,7 +4,7 @@ from flask_pydantic import validate
 from uuid import UUID
 
 from ..database import User, Dictionary, Word, WordTranslation, Language, db
-from ..schemes import (
+from ..schemes.schemes import (
     WordSchema,
     WordTranslationSchema,
     ListOfWordsSchema,

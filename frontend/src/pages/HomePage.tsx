@@ -14,6 +14,7 @@ import ModalEditDictionaries from '../modals/ModalEditDictionaries';
 import AuthContext from '../context/AuthContext';
 import WordList from '../compontents/WordList';
 import { WordType } from '../types/WordType';
+import { gridContainerStyle, sidebarStackStyle, trainSidebarButtonStyle } from './styles/StylesHomePage';
 
 
 const HomePage = () => {
@@ -84,17 +85,8 @@ const HomePage = () => {
   };
 
   return (
-    <Grid container sx={{ padding: 2, gap: '1%' }}>
-      <Stack sx={{
-        width: '23%',
-        height: '100%',
-        bgcolor: 'secondary.main',
-        paddingX: 3,
-        paddingY: 2,
-        borderRadius: 2,
-        gap: 1,
-        justifyContent: 'space-between',
-      }}>
+    <Grid container sx={gridContainerStyle}>
+      <Stack sx={sidebarStackStyle} width='23%'>
         <Typography variant='h6'>
           <FormattedMessage id='sidebar.dict_title' />
         </Typography>
@@ -115,16 +107,7 @@ const HomePage = () => {
         wordsToStudy={wordsToStudy} setWordsToStudy={setWordsToStudy}
         dict={dicts.find(dict => dict.id === currentDictId)} loading={loading} />
 
-      <Stack sx={{
-        width: '19%',
-        height: '100%',
-        bgcolor: 'secondary.main',
-        paddingX: 3,
-        paddingY: 2,
-        borderRadius: 2,
-        gap: 1,
-        justifyContent: 'space-between',
-      }}>
+      <Stack sx={sidebarStackStyle} width='19%'>
         {
           loading ?
             <Typography variant='h6'>
@@ -134,11 +117,11 @@ const HomePage = () => {
               <Typography variant='h6'>
                 <FormattedMessage id='train_sidebar.train_menu_title' />
               </Typography>
-              <Button variant='contained' sx={{ textTransform: 'none' }}
+              <Button variant='contained' sx={trainSidebarButtonStyle}
                 onClick={() => handleStartTrain('/train-words-by-tranlsation')}>
                 <FormattedMessage id='train_sidebar.btn.write_word_for_translation' />
               </Button>
-              <Button variant='contained' sx={{ textTransform: 'none' }}
+              <Button variant='contained' sx={trainSidebarButtonStyle}
                 onClick={() => handleStartTrain('/train-matching-words')}>
                 <FormattedMessage id='train_sidebar.btn.matching_words_and_translations' />
               </Button>

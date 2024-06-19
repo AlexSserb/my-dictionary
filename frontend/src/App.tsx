@@ -26,7 +26,7 @@ function App() {
   const handleLangChange = (e: SelectChangeEvent<string>) => {
     setCurrentLocale(e.target.value);
     localStorage.setItem('locale', e.target.value);
-  }
+  };
 
   return (
     <div className='App'>

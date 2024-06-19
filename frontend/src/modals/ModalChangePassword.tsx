@@ -6,21 +6,11 @@ import {
 import { FormattedMessage } from 'react-intl';
 
 import authService from '../services/AuthService';
-
-const style = {
-	position: 'absolute',
-	top: '50%',
-	left: '50%',
-	transform: 'translate(-50%, -50%)',
-	width: 550,
-	bgcolor: 'secondary.main',
-	borderRadius: '8px',
-	boxShadow: 24,
-	p: 4,
-};
+import { modalStyle } from './styles/StylesModalChangePassword';
+import { modalTitleStyle } from './styles/Styles';
 
 interface ModalChangePasswordProps {
-	setSettingsSuccessMessage: React.Dispatch<React.SetStateAction<string>>
+	setSettingsSuccessMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const ModalChangePassword = ({ setSettingsSuccessMessage }: ModalChangePasswordProps) => {
@@ -36,9 +26,9 @@ const ModalChangePassword = ({ setSettingsSuccessMessage }: ModalChangePasswordP
 	const handleSubmit = () => {
 		setMessage('');
 		if (newPassword !== repeatNewPassword) {
-    		setMessage('Passwords don\'t match.');
-    		return;
-    	}
+			setMessage('Passwords don\'t match.');
+			return;
+		}
 
 		if (newPassword.length < 8) {
 			setMessage('Password must be at least 8 characters.');
@@ -55,13 +45,13 @@ const ModalChangePassword = ({ setSettingsSuccessMessage }: ModalChangePasswordP
 					setMessage(err.response.data?.message);
 				}
 				else {
-					setMessage('Password changing error.')
+					setMessage('Password changing error.');
 				}
 			});
-	}
+	};
 
 	return (
-		<div>
+		<Box>
 			<Button variant='contained' sx={{ marginBottom: 1 }} onClick={handleOpen}>
 				<FormattedMessage id='change_password_btn' />
 			</Button>
@@ -69,11 +59,8 @@ const ModalChangePassword = ({ setSettingsSuccessMessage }: ModalChangePasswordP
 				open={open}
 				onClose={handleClose}
 			>
-				<Box sx={style}>
-					<Typography variant='h5' component='h5' sx={{
-						textAlign: 'center',
-						marginBottom: 3
-					}}>
+				<Box sx={modalStyle}>
+					<Typography variant='h5' component='h5' sx={modalTitleStyle}>
 						<FormattedMessage id='password_change_header' />
 					</Typography>
 
@@ -108,8 +95,8 @@ const ModalChangePassword = ({ setSettingsSuccessMessage }: ModalChangePasswordP
 					</Stack>
 				</Box>
 			</Modal>
-		</div >
+		</Box>
 	);
-}
+};
 
 export default ModalChangePassword;

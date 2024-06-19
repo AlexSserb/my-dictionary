@@ -18,7 +18,7 @@ class WordService {
 	}
 
 	applyTrainingResults(results: WordTrainResultType[]) {
-		return axiosConfig.post(API_URL + 'apply-training-results', { trainingResults: results});
+		return axiosConfig.post(API_URL + 'apply-training-results', { trainingResults: results });
 	}
 }
 

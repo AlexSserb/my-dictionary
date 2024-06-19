@@ -27,17 +27,13 @@ const SettingsPage = ({ currentLocale, handleLangChange }: SettingsProps) => {
 			navigate('/login');
 			return;
 		}
-	}, [authTokens])
+	}, [authTokens]);
 
 	return (
-		<Grid container sx={{
-			direction: 'column',
-			alignItems: 'center',
-			justifyContent: 'center',
-		}}>
+		<Grid container justifyContent='center'>
 			<Paper sx={{
 				padding: 4, marginTop: 3, width: '40%',
-				minWidth: '500px', backgroundColor: 'secondary.main'
+				minWidth: 450, backgroundColor: 'secondary.main'
 			}}>
 				<Typography textAlign={'center'} variant='h5' component='h5' sx={{ paddingY: 1 }}>
 					<FormattedMessage id='settings' />
@@ -64,7 +60,7 @@ const SettingsPage = ({ currentLocale, handleLangChange }: SettingsProps) => {
 				</Button>
 			</Paper>
 		</Grid>
-	)
-}
+	);
+};
 
 export default SettingsPage;
