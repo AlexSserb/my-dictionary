@@ -13,7 +13,8 @@ import {
     stackContainerStyle,
     finishedButtonStyle,
     buttonStyle,
-    clickedButtonStyle
+    clickedButtonStyle,
+    gridContainerStyle
 } from './styles/StylesTrainingMatchingPage';
 
 
@@ -170,7 +171,7 @@ const TrainingMatchingPage = () => {
     };
 
     return (
-        <Grid container sx={{ padding: 2, gap: 2, justifyContent: 'center' }}>
+        <Grid container sx={gridContainerStyle}>
             <Stack sx={stackContainerStyle}>
                 <Typography variant='h5' paddingBottom={2}>
                     <FormattedMessage id='train_word_by_translation.title' />

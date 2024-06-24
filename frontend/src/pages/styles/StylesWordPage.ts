@@ -1,5 +1,12 @@
+export const gridContainerStyle = {
+    padding: 2,
+    gap: 2,
+    justifyContent: 'center'
+};
+
 export const stackContainerStyle = {
     width: '50%',
+    minWidth: 330,
     bgcolor: 'secondary.main',
     paddingX: 5,
     paddingY: 4,

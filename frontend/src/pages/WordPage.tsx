@@ -14,7 +14,7 @@ import translationService from '../services/TranslationService';
 import Dictionary from '../types/DictionaryType';
 import WordTranslationType from '../types/WordTranslationType';
 import wordService from '../services/WordService';
-import { stackContainerStyle, translationCardStyle } from './styles/StylesWordPage';
+import { gridContainerStyle, stackContainerStyle, translationCardStyle } from './styles/StylesWordPage';
 import { fieldBoxStyle } from './styles/Styles';
 
 
@@ -84,7 +84,7 @@ const WordPage = () => {
 	};
 
 	return (
-		<Grid container sx={{ padding: 2, gap: 2, justifyContent: 'center' }}>
+		<Grid container sx={gridContainerStyle}>
 			<Stack sx={stackContainerStyle}>
 				<Typography variant='h5' paddingBottom={2}>
 					{

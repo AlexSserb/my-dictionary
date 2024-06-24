@@ -89,6 +89,7 @@ const TrainingWordsByTransPage = () => {
 		<Grid container sx={{ padding: 2, gap: 2, justifyContent: 'center' }}>
 			<Stack sx={{
 				width: '40%',
+				minWidth: 330,
 				bgcolor: 'secondary.main',
 				paddingX: 5,
 				paddingY: 4,

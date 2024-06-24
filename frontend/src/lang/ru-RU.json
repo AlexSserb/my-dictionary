@@ -30,6 +30,10 @@
     "wordlist.show_studied_words": "Показать выученные слова",
     "wordlist.hide_studied_words": "Скрыть выученные слова",
 
+    "first_dict.create_dictionary_title": "Создайте свой первый словарь",
+    "first_dict.studied_lang_field_label": "Выберите язык, который Вы знаете",
+    "first_dict.target_lang_field_label": "Выберите язык, который хотите изучить",
+
     "wordpage.word_field_label": "Слово",
     "wordpage.title_add": "Добавление нового слова",
     "wordpage.title_edit": "Редактирование слова",

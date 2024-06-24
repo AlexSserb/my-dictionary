@@ -7,7 +7,7 @@ import LoginForm from '../types/LoginFormType';
 import RegistrationForm from '../types/RegistrationFormType';
 import authService from '../services/AuthService';
 
-interface AuthContext {
+interface IAuthContext {
     user: CustomJwtPayload | null;
     authTokens: any;
     loginUser: (e: FormEvent<LoginForm>) => void;
@@ -17,7 +17,7 @@ interface AuthContext {
     logoutUser: () => void;
 }
 
-const AuthContext = createContext<AuthContext>({
+const AuthContext = createContext<IAuthContext>({
     user: null,
     authTokens: null,
     loginUser: (e: FormEvent<LoginForm>) => { },
@@ -67,7 +67,7 @@ export const AuthProvider = ({ children }: any) => {
                     defaultAuthErrorHandling(err, 'Log in failed.');
                 }
             });
-    }
+    };
 
     const registerUser = (e: FormEvent<RegistrationForm>) => {
         e.preventDefault();
@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }: any) => {
                 setAuthTokens(res.data);
                 setUser(jwtDecode(res.data.accessToken));
                 localStorage.setItem('authTokens', JSON.stringify(res.data));
-                navigate('/');
+                navigate('/first-dict', { state: { redirected: true } });
             })
             .catch(err => {
                 console.log(err.response?.data);
@@ -89,7 +89,7 @@ export const AuthProvider = ({ children }: any) => {
                     defaultAuthErrorHandling(err, 'Registration error');
                 }
             });
-    }
+    };
 
     const defaultAuthErrorHandling = (err: AxiosError, defaultErrorMsg: string) => {
         if (!err.response) {
@@ -99,16 +99,15 @@ export const AuthProvider = ({ children }: any) => {
             console.log(err);
             setMessage(defaultErrorMsg);
         }
-    }
+    };
 
     const logoutUser = () => {
         setAuthTokens(null);
         setUser(null);
         localStorage.removeItem('authTokens');
-    }
+    };
 
     const updateToken = () => {
-        console.log('Update token call!');
         authService.refresh()
             .then((res) => {
                 setAuthTokens(res.data);
@@ -117,7 +116,7 @@ export const AuthProvider = ({ children }: any) => {
             })
             .catch(_ => logoutUser())
             .finally(() => setLoading(false));
-    }
+    };
 
     const contextData = {
         user: user,
@@ -127,25 +126,25 @@ export const AuthProvider = ({ children }: any) => {
         message: message,
         changeMessage: changeMessage,
         logoutUser: logoutUser
-    }
+    };
 
     useEffect(() => {
         if (loading) {
             updateToken();
         }
 
-        let minutes = 1000 * 60 * 14.5;
+        let minutes = 1000 * 60 * 55;
         let interval = setInterval(() => {
             if (authTokens) {
                 updateToken();
             }
         }, minutes);
         return () => clearInterval(interval);
-    }, [loading, authTokens])
+    }, [loading, authTokens]);
 
     return (
         <AuthContext.Provider value={contextData}>
             {loading ? null : children}
         </AuthContext.Provider>
-    )
-}
+    );
+};

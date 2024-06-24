@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -20,7 +20,7 @@ type WordListProps = {
 	setWordsToStudy: React.Dispatch<React.SetStateAction<WordType[]>>;
 	dict: Dictionary | undefined;
 	loading: boolean;
-}
+};
 
 const WordList = ({ studiedWords, setStudiedWords, wordsToStudy, setWordsToStudy, dict, loading }: WordListProps) => {
 	const [open, setOpen] = useState(false);
@@ -39,7 +39,7 @@ const WordList = ({ studiedWords, setStudiedWords, wordsToStudy, setWordsToStudy
 	const handleDeleteButtonClick = (wordId: string) => {
 		setCurWordId(wordId);
 		handleOpen();
-	}
+	};
 
 	const deleteWord = () => {
 		handleClose();
@@ -53,7 +53,7 @@ const WordList = ({ studiedWords, setStudiedWords, wordsToStudy, setWordsToStudy
 			});
 
 		setCurWordId('');
-	}
+	};
 
 	const handleEditButtonClick = (wordId: string) => {
 		const words = [...studiedWords, ...wordsToStudy];
@@ -64,7 +64,7 @@ const WordList = ({ studiedWords, setStudiedWords, wordsToStudy, setWordsToStudy
 				word: words.find(word => word.id === wordId)
 			}
 		});
-	}
+	};
 
 	const renderWords = (wordsToRender: Array<WordType>) => {
 		return wordsToRender.map(word => <WordItem
@@ -72,11 +72,11 @@ const WordList = ({ studiedWords, setStudiedWords, wordsToStudy, setWordsToStudy
 			handleEditButtonClick={handleEditButtonClick}
 			handleDeleteButtonClick={handleDeleteButtonClick}
 		/>);
-	}
+	};
 
 	return (
 		<Stack sx={{
-			width: '55%',
+			flexGrow: 6,
 			bgcolor: 'secondary.main',
 			paddingX: 3,
 			paddingY: 2,
@@ -144,7 +144,7 @@ const WordList = ({ studiedWords, setStudiedWords, wordsToStudy, setWordsToStudy
 
 			</Dialog>
 		</Stack>
-	)
-}
+	);
+};
 
 export default WordList;

@@ -55,8 +55,8 @@ function ApplicationBar() {
       >
         {mainTitle}
       </Typography>
-    )
-  }
+    );
+  };
 
   const avatarAndSettingsMenu = () => {
     if (user) return (
@@ -65,13 +65,13 @@ function ApplicationBar() {
           <SettingsIcon style={{ color: '#FFFFFF' }} />
         </Button>
       </Tooltip>
-    )
+    );
     else return (
       <Box sx={{ flexGrow: 0 }}>
         <Link to='/login' style={{ textDecoration: 'none', color: 'white' }}>Log In</Link>
       </Box>
-    )
-  }
+    );
+  };
 
   return (
     <AppBar position='static'>
@@ -138,4 +138,5 @@ function ApplicationBar() {
     </AppBar>
   );
 }
+
 export default ApplicationBar;

@@ -33,7 +33,7 @@ const SettingsPage = ({ currentLocale, handleLangChange }: SettingsProps) => {
 		<Grid container justifyContent='center'>
 			<Paper sx={{
 				padding: 4, marginTop: 3, width: '40%',
-				minWidth: 450, backgroundColor: 'secondary.main'
+				minWidth: 320, backgroundColor: 'secondary.main'
 			}}>
 				<Typography textAlign={'center'} variant='h5' component='h5' sx={{ paddingY: 1 }}>
 					<FormattedMessage id='settings' />

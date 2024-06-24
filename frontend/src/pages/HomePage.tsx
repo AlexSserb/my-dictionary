@@ -14,7 +14,7 @@ import ModalEditDictionaries from '../modals/ModalEditDictionaries';
 import AuthContext from '../context/AuthContext';
 import WordList from '../compontents/WordList';
 import { WordType } from '../types/WordType';
-import { gridContainerStyle, sidebarStackStyle, trainSidebarButtonStyle } from './styles/StylesHomePage';
+import { gridContainerStyle, sidebarStackStyle, sidebarTrainStackStyle, trainSidebarButtonStyle } from './styles/StylesHomePage';
 
 
 const HomePage = () => {
@@ -86,7 +86,7 @@ const HomePage = () => {
 
   return (
     <Grid container sx={gridContainerStyle}>
-      <Stack sx={sidebarStackStyle} width='23%'>
+      <Stack sx={sidebarStackStyle}>
         <Typography variant='h6'>
           <FormattedMessage id='sidebar.dict_title' />
         </Typography>
@@ -107,7 +107,7 @@ const HomePage = () => {
         wordsToStudy={wordsToStudy} setWordsToStudy={setWordsToStudy}
         dict={dicts.find(dict => dict.id === currentDictId)} loading={loading} />
 
-      <Stack sx={sidebarStackStyle} width='19%'>
+      <Stack sx={sidebarTrainStackStyle}>
         {
           loading ?
             <Typography variant='h6'>
@@ -128,7 +128,7 @@ const HomePage = () => {
             </>
         }
       </Stack>
-    </Grid>
+    </Grid >
   );
 };
 

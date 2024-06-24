@@ -30,6 +30,10 @@
     "wordlist.show_studied_words": "Show studied words",
     "wordlist.hide_studied_words": "Hide studied words",
 
+    "first_dict.create_dictionary_title": "Create your first dictionary",
+    "first_dict.studied_lang_field_label": "Select the language you speak",
+    "first_dict.target_lang_field_label": "Select the language you want to learn",
+
     "wordpage.word_field_label": "Word",
     "wordpage.title_add": "Adding a new word",
     "wordpage.title_edit": "Word editing",

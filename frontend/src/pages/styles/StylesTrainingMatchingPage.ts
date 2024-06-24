@@ -21,8 +21,15 @@ export const finishedButtonStyle = {
     padding: 2,
 };
 
+export const gridContainerStyle = {
+    padding: 2,
+    gap: 2,
+    justifyContent: 'center',
+};
+
 export const stackContainerStyle = {
     width: '50%',
+    minWidth: 320,
     bgcolor: 'secondary.main',
     paddingX: 5,
     paddingY: 4,

@@ -19,6 +19,7 @@ import { LOCALES } from './i18n/locales';
 import { messages } from './i18n/messages';
 import TrainResultsPage from './pages/TrainResultsPage';
 import TrainingMatchingPage from './pages/TrainingMatchingPage';
+import FirstDictPage from './pages/FirstDictPage';
 
 function App() {
   const [currentLocale, setCurrentLocale] = useState(localStorage.getItem('locale') || LOCALES.ENGLISH);
@@ -44,6 +45,7 @@ function App() {
                 <Route path='/' element={<HomePage />} />
                 <Route path='/registration' element={<RegistrationPage />} />
                 <Route path='/login' element={<LoginPage />} />
+                <Route path='/first-dict' element={<FirstDictPage />} />
                 <Route path='/settings' element={<SettingsPage currentLocale={currentLocale} handleLangChange={handleLangChange} />} />
                 <Route path='/word' element={<WordPage />} />
                 <Route path='/train-words-by-tranlsation' element={<TrainingWordsByTransPage />} />
