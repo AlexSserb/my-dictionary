@@ -1,7 +1,8 @@
-import { UUID } from "crypto";
+import { UUID } from 'crypto';
 
 export default interface Language {
     id: UUID,
     name: string,
-    code: string
+    code: string,
+    longCode: string;
 }

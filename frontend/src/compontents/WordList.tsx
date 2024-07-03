@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -61,7 +61,7 @@ const WordList = ({ studiedWords, setStudiedWords, wordsToStudy, setWordsToStudy
 			state: {
 				dict: dict,
 				words: words,
-				word: words.find(word => word.id === wordId)
+				word: words.find(word => word.id === wordId),
 			}
 		});
 	};

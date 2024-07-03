@@ -9,6 +9,7 @@ class LanguageSchema(CommonSchema):
     id: UUID
     name: str
     code: str
+    long_code: str
 
 
 class ListOfLanguagesSchema(CommonSchema):

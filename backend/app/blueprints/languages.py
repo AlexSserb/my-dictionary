@@ -12,7 +12,7 @@ def get_languages():
     languages = Language.get_all()
 
     languages = [
-        LanguageSchema(id=lang.id, name=lang.name, code=lang.code) for lang in languages
+        LanguageSchema(id=lang.id, name=lang.name, code=lang.code, long_code=lang.long_code) for lang in languages
     ]
 
     return (

@@ -72,7 +72,8 @@ class Language(db.Model):
 
     id: Mapped[uuid.UUID] = mapped_column(default=uuid.uuid4, primary_key=True)
     name: Mapped[str] = mapped_column(String(128), index=True, unique=True)
-    code: Mapped[str] = mapped_column(String(5), unique=True)
+    code: Mapped[str] = mapped_column(String(2), unique=True)
+    long_code: Mapped[str] = mapped_column(String(5), unique=True)
 
     dictionaries_where_lang_learned: Mapped["Dictionary"] = relationship(
         foreign_keys="Dictionary.learned_language_id", back_populates="learned_language"
@@ -86,6 +87,7 @@ class Language(db.Model):
             id=self.id,
             name=self.name,
             code=self.code,
+            long_code=self.long_code,
         )
 
     @staticmethod

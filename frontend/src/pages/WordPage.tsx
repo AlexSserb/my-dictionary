@@ -7,6 +7,7 @@ import {
 	Box, Typography, FormControl,
 } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 
 import AuthContext from '../context/AuthContext';
 import { WordType } from '../types/WordType';
@@ -16,6 +17,8 @@ import WordTranslationType from '../types/WordTranslationType';
 import wordService from '../services/WordService';
 import { gridContainerStyle, stackContainerStyle, translationCardStyle } from './styles/StylesWordPage';
 import { fieldBoxStyle } from './styles/Styles';
+import textToSpeech from '../utils/textToSpeech';
+import getVoicesPromise from '../utils/getVoicesPromise';
 
 
 const WordPage = () => {
@@ -29,12 +32,17 @@ const WordPage = () => {
 	const [word, setWord] = useState<WordType>({ id: uuidv4(), word: '', translations: [], dictionaryId: dict.id, progress: 0 });
 	const [message, setMessage] = useState('');
 	const [curTrans, setCurTrans] = useState<WordTranslationType>({ id: uuidv4(), translation: "" });
+	const [voice, setVoice] = useState<SpeechSynthesisVoice | null>(null);
 
 	useEffect(() => {
 		if (!authTokens || !authTokens.accessToken) {
 			navigate("/login");
 			return;
 		}
+
+		getVoicesPromise().then((voices: SpeechSynthesisVoice[]) => {
+			setVoice(voices.find(voice => voice.lang === dict.targetLanguage.longCode) ?? voices[200]);
+		});
 
 		if (state.word) {
 			setWord({ ...state.word, });
@@ -53,6 +61,10 @@ const WordPage = () => {
 			.catch(err => {
 				console.log(err);
 			});
+	};
+
+	const utter = () => {
+		textToSpeech(word.word, voice);
 	};
 
 	const addTranslation = () => {
@@ -113,6 +125,9 @@ const WordPage = () => {
 								</Box>
 								<Button variant='contained' type='button' onClick={() => translate()}>
 									<FormattedMessage id='wordpage.translate_button' />
+								</Button>
+								<Button variant='contained' type='button' onClick={() => utter()}>
+									<VolumeUpIcon />
 								</Button>
 							</Stack>
 						</FormControl><br />
